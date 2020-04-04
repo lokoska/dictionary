@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 ./gradlew client:browserProductionWebpack
 
-cp -r client/build/distributions/ docs
+cp -r client/build/distributions/* docs
 ls -la docs
