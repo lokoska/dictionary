@@ -1,36 +1,24 @@
 package services
 
-import JSON_PLACEHOLDER_URL
-import kotlinx.coroutines.await
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.builtins.list
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.list
+import model.Geo
 import model.User
-import org.w3c.fetch.RequestInit
-import kotlin.browser.window
+import model.UserAddress
+import model.UserCompany
 import kotlin.coroutines.CoroutineContext
-import kotlin.js.json
 
 class UserService(private val coroutineContext: CoroutineContext) {
-    suspend fun getUsers(): List<User> {
-        val response = fetch("$JSON_PLACEHOLDER_URL/users")
-        return Json.parse(User.serializer().list, response)
-    }
 
     suspend fun getUser(id: Int): User {
-        val response = fetch("$JSON_PLACEHOLDER_URL/users/$id")
-        return Json.parse(User.serializer(), response)
+        return User(
+            1,
+            "name",
+            "uname",
+            "mail@",
+            UserAddress("st", "sui", "Mosc", "123", Geo("1", "2")),
+            phone = "1234567",
+            website = "site.org",
+            company = UserCompany("Com", "ca", "bs")
+        )
     }
 
-    private suspend fun fetch(url: String): String {
-        return withContext(coroutineContext) {
-            val response = window.fetch(url, RequestInit("GET", headers = json(
-                "Accept" to "application/json",
-                "Content-Type" to "application/json"
-            ))).await()
-
-            response.text().await()
-        }
-    }
 }

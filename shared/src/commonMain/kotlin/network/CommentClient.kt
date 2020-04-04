@@ -31,6 +31,3 @@ internal class FakeJsonCommentData {
 }
 
 
-expect class CommentClient(coroutineContext: CoroutineContext) {
-    suspend fun getComments(postId: String, count: Int = 5): String
-}

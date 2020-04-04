@@ -36,6 +36,5 @@ private class Application : CoroutineScope {
 
 fun main() {
     GlobalStyles.inject()
-
     Application().start()
 }
