@@ -61,14 +61,9 @@ kotlin {
     }
 }
 
-//compileKotlin {
-//    kotlinOptions.freeCompilerArgs = [
-//            "-Xallow-result-return-typ"
-//    ]
-//}
-
-if(false) tasks.getByName<org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile>("compileKotlinJs") {
+tasks.getByName<org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile>("compileKotlinJs") {
     kotlinOptions {
-        freeCompilerArgs += listOf("-Xir-produce-js", "-Xgenerate-dts")
+        freeCompilerArgs += listOf("-Xallow-result-return-type")
+//        freeCompilerArgs += listOf("-Xir-produce-js", "-Xgenerate-dts")
     }
 }
