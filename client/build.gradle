@@ -17,7 +17,11 @@ def kotlinx_serialization_version = '0.20.0'
 kotlin {
     target {
         useCommonJs()
-        browser()
+        browser() {
+            webpackTask {
+                sourceMaps = false
+            }
+        }
     }
 }
 
