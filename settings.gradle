@@ -18,4 +18,3 @@ rootProject.name = 'kotlin-full-stack-application-demo'
 
 include 'shared'
 include 'client'
-include 'server'
