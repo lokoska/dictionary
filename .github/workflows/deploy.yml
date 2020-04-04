@@ -4,9 +4,8 @@ on:
   push:
     branches: [ master ]
     paths:
-      - "client/*"
-      - "shared/*"
-      - "kotlin-project/*"
+      - "**"
+      - "!docs/**"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,6 +21,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git add docs
           git commit -m "Add changes" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
