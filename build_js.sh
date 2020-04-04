@@ -2,3 +2,4 @@
 ./gradlew client:browserProductionWebpack
 
 cp -r client/build/distributions/ docs
+ls -la docs
