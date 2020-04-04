@@ -14,8 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-java@v1
+          with: {java-version: 12.0.2}
       - name: Build static Kotlin-JS web site
-        run: build_js.sh
+        run: ./build_js.sh
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
