@@ -11,11 +11,17 @@ enum class Method {
 }
 
 suspend fun requestStr(
-    url: String,
+    hostPath: String,
+    urlArgs: Map<String, String> = mapOf(),
     method: Method = Method.GET,
     headers: Map<String, String> = mapOf(),
     body: String? = null
 ): Result<String> {
+    var url: String = hostPath
+    if (urlArgs.isNotEmpty()) {
+        url += "?"
+        url += urlArgs.entries.joinToString("&", transform = { "${it.key}=${urlEncode(it.value)}" })
+    }
     val response = window.fetch(
         url,
         RequestInit(
@@ -34,3 +40,9 @@ suspend fun requestStr(
         Result.failure<String>(Exception(response.statusText))
     }
 }
+
+@JsName("encodeURIComponent")
+external fun urlEncode(value: String): String
+
+@JsName("decodeURIComponent")
+external fun urlDecode(encoded: String): String
