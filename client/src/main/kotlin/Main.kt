@@ -1,5 +1,7 @@
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import network.requestStr
 import react.buildElement
 import react.dom.render
 import view.ApplicationComponent
@@ -16,6 +18,14 @@ private class Application : CoroutineScope {
                     attrs.coroutineScope = this@Application
                 }
             }, it)
+        }
+        launch {
+            println("make request to github")
+            val response = requestStr("https://api.github.com/orgs/Kotlin/repos")
+            response.onSuccess {
+                println(it)
+            }
+
         }
     }
 }

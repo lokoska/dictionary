@@ -12,8 +12,8 @@ enum class Method {
 
 suspend fun requestStr(
     url: String,
-    method: Method,
-    headers: Map<String, String>,
+    method: Method = Method.GET,
+    headers: Map<String, String> = mapOf(),
     body: String? = null
 ): Result<String> {
     val response = window.fetch(
