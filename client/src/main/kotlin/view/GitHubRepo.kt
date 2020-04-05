@@ -3,11 +3,12 @@ package view
 import contrib.ringui.island.ringIsland
 import contrib.ringui.island.ringIslandContent
 import contrib.ringui.island.ringIslandHeader
-import contrib.ringui.ringButton
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
+import kotlinx.html.js.onClickFunction
 import model.GitHubRepo
 import react.*
+import react.dom.button
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -100,10 +101,9 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
                 }
 
                 if (!state.noMore) {
-                    ringButton {
+                    button {
                         attrs {
-                            loader = state.loading
-                            onMouseDown = {
+                            onClickFunction = {
                                 setState {
                                     loading = true
                                 }
@@ -119,7 +119,7 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
     }
 }
 
-fun RBuilder.postView(
+fun RBuilder.gitHubRepoView(
     post: GitHubRepo,
     onLoadCommmits: () -> Unit,
     handler: RHandler<GitHubRepoProps> = {}

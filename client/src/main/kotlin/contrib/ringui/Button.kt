@@ -28,8 +28,3 @@ external interface ButtonProps : WithClassName {
     var onMouseDown: (MouseEvent) -> Unit
 }
 
-fun RBuilder.ringButton(handler: RHandler<ButtonProps>) {
-    RingUI.Button {
-        handler()
-    }
-}

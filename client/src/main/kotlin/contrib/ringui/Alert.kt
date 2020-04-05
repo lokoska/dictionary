@@ -18,17 +18,3 @@ external interface AlertProps : WithClassName {
 }
 
 typealias AlertType = String
-
-object AlertTypes {
-    var ERROR = "error"
-    var MESSAGE = "message"
-    var SUCCESS = "success"
-    var WARNING = "warning"
-    var LOADING = "loading"
-}
-
-fun RBuilder.ringAlert(handler: RHandler<AlertProps>) {
-    RingUI.Alert {
-        handler()
-    }
-}

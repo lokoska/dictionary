@@ -5,7 +5,6 @@ import react.RClass
 
 @JsModule("@jetbrains/ring-ui")
 external object RingUI {
-    val Alert: RClass<AlertProps>
     val Button: RClass<ButtonProps>
     val Dialog: RClass<DialogProps>
     val Header: RClass<HeaderProps>

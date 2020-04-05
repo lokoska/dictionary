@@ -53,7 +53,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
         val postWithCommentsService = PostWithCommentsService(coroutineContext)
 
         props.coroutineScope.launch {
-            val repos = postWithCommentsService.getGitHubRepos("Kotlin")//TODO брать из стейта
+            val repos = postWithCommentsService.getGitHubRepos("Kotlin")
 
             setState {
                 gitHubRepos += repos
@@ -110,11 +110,12 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                     css {
                         +ApplicationStyles.post
                     }
-                    postView(
+                    gitHubRepoView(
                         repo,
                         onLoadCommmits = {
                             onLoadCommitsLog(repo.organization, repo.name)
-                        })
+                        }
+                    )
                 }
             }
         }
