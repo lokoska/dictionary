@@ -1,16 +1,15 @@
 package view
 
+import github.GitHubRepo
+import github.GitHubService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
-import model.GitHubRepo
 import network.requestStr
 import react.*
 import react.dom.h2
-import services.CommentsService
-import services.PostWithCommentsService
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -44,13 +43,11 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
         get() = props.coroutineScope.coroutineContext
 
     override fun componentDidMount() {
-        val postWithCommentsService = PostWithCommentsService(coroutineContext)
-
         props.coroutineScope.launch {
-            val repos = postWithCommentsService.getGitHubRepos("Kotlin")
-
-            setState {
-                gitHubRepos += repos
+            GitHubService.getGitHubRepos("Kotlin").onSuccess {
+                setState {
+                    gitHubRepos += it
+                }
             }
         }
 
@@ -100,14 +97,16 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     }
 
     private fun onLoadCommitsLog(organization: String, repoName: String) {
-        val commitLoadService = CommentsService(coroutineContext)
         props.coroutineScope.launch {
-            val commitLogs = commitLoadService.loadCommitLog(organization, repoName)
-            setState {
-                gitHubRepos = gitHubRepos.map {
-                    if (it.name != repoName) it else it.copy(commitLogs = it.commitLogs + commitLogs)
+            val commitLogs = GitHubService.loadCommitLog(organization, repoName)
+                .onSuccess { commits ->
+                    setState {
+                        gitHubRepos = gitHubRepos.map {
+                            if (it.name != repoName) it else it.copy(commitLogs = it.commitLogs + commits)
+                        }
+                    }
                 }
-            }
+
         }
     }
 

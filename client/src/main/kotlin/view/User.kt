@@ -1,6 +1,6 @@
 package view
 
-import model.GitHubRepo
+import github.GitHubRepo
 import react.RBuilder
 import react.dom.*
 import styled.DIVBuilder

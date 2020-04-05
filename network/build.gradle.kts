@@ -1,6 +1,5 @@
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
-    id("kotlinx-serialization")
 }
 
 kotlin {
@@ -20,10 +19,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":network"))
                 implementation(project(":lib"))
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains:kotlin-css:1.0.0-$KOTLIN_WRAPPER_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$SERIALIZATION_VERSION")
             }
         }
@@ -36,7 +33,6 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$SERIALIZATION_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$COROUTINES_VERSION")
             }
         }
@@ -48,9 +44,3 @@ kotlin {
     }
 }
 
-tasks.getByName<org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile>("compileKotlinJs") {
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xallow-result-return-type")
-//        freeCompilerArgs += listOf("-Xir-produce-js", "-Xgenerate-dts")
-    }
-}

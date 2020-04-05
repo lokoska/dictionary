@@ -1,4 +1,4 @@
-package model
+package github
 
 data class GitHubRepo(
     val imageUrl: String,

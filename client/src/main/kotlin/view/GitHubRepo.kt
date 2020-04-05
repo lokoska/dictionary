@@ -3,7 +3,7 @@ package view
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
-import model.GitHubRepo
+import github.GitHubRepo
 import react.*
 import react.dom.button
 import styled.StyleSheet

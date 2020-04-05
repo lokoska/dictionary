@@ -1,7 +1,7 @@
 package view
 
 import kotlinx.css.*
-import model.CommitInfo
+import github.CommitInfo
 import react.RBuilder
 import styled.DIVBuilder
 import styled.css

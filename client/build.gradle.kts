@@ -18,6 +18,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$SERIALIZATION_VERSION")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$COROUTINES_VERSION")
     implementation(project(":github"))
+    implementation(project(":network"))
+    implementation(project(":lib"))
 
     implementation(npm("core-js", "2.6.5"))
     implementation(npm("svg-inline-loader", "0.8.0"))

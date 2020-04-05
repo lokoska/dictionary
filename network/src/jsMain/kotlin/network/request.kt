@@ -1,17 +1,18 @@
 package network
 
 import kotlinx.coroutines.await
+import lib.Result2
 import org.w3c.fetch.RequestInit
 import kotlin.browser.window
 import kotlin.js.json
 
-suspend fun requestStr(
+actual suspend fun requestStr(
     hostPath: String,
-    urlArgs: Map<String, String> = mapOf(),
-    method: Method = Method.GET,
-    headers: Map<String, String> = mapOf(),
-    body: String? = null
-): Result<String> {
+    urlArgs: Map<String, String>,
+    method: Method,
+    headers: Map<String, String>,
+    body: String?
+): Result2<String> {
     var url: String = hostPath
     if (urlArgs.isNotEmpty()) {
         url += "?"
@@ -30,15 +31,10 @@ suspend fun requestStr(
         )
     ).await()
     return if (response.ok) {
-        Result.success<String>(response.text().await())
+        Result2.success(response.text().await())
     } else {
-        Result.failure<String>(Exception(response.statusText))
+        Result2.failure(Exception(response.statusText))
     }
-}
-
-enum class Method {
-    GET,
-    POST
 }
 
 @JsName("encodeURIComponent")
