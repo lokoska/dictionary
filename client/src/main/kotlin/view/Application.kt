@@ -92,8 +92,11 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
         }
 
         styledDiv {
+            css {
+                +ApplicationStyles.wrapper
+            }
             h2 {
-                +("deploy time: " + state.deployTime)
+                +("Deploy time: " + state.deployTime)
             }
         }
 
