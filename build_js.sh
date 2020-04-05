@@ -3,4 +3,4 @@
 
 cp -r client/build/distributions/* docs
 date > docs/build_date.txt
-ls -la docs
+du -sh docs/*
