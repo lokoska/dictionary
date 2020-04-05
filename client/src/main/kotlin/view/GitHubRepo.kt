@@ -67,10 +67,9 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
             css {
                 padding(all = 10.px)
                 backgroundColor = Color.lightGray
-//                outline = Outline.valueOf("1px solid #666")
             }
 
-            userView(props.gitHubRepo.name, props.gitHubRepo.imageUrl) {
+            repoView(props.gitHubRepo) {
                 css {
                     marginBottom = 16.px
                 }

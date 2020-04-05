@@ -1,20 +1,28 @@
 package view
 
-import contrib.ringui.UserCardModel
-import contrib.ringui.ringUserCard
+import model.GitHubRepo
 import react.RBuilder
+import react.dom.*
 import styled.DIVBuilder
 import styled.styledDiv
 
-fun RBuilder.userView(name:String, avatarUrl: String, builder: DIVBuilder = {}) {
+fun RBuilder.repoView(repo: GitHubRepo, builder: DIVBuilder = {}) {
     styledDiv {
-        ringUserCard(
-            UserCardModel(
-                name = name,
-                login = name,//todo ошибка если не передавать login
-                avatarUrl = avatarUrl
-            )
-        )
+        table {
+            tr {
+                th {
+                    img(src = repo.imageUrl) {
+                        attrs.width = "100px"
+                    }
+                }
+                th {
+                    h4 {
+                        +repo.name
+                    }
+                    +repo.organization
+                }
+            }
+        }
         builder()
     }
 }

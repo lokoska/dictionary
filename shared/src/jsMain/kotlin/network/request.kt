@@ -5,11 +5,6 @@ import org.w3c.fetch.RequestInit
 import kotlin.browser.window
 import kotlin.js.json
 
-enum class Method {
-    GET,
-    POST
-}
-
 suspend fun requestStr(
     hostPath: String,
     urlArgs: Map<String, String> = mapOf(),
@@ -39,6 +34,11 @@ suspend fun requestStr(
     } else {
         Result.failure<String>(Exception(response.statusText))
     }
+}
+
+enum class Method {
+    GET,
+    POST
 }
 
 @JsName("encodeURIComponent")
