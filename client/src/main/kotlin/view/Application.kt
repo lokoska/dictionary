@@ -9,7 +9,9 @@ import kotlinx.css.padding
 import kotlinx.css.paddingLeft
 import kotlinx.css.px
 import model.GitHubRepo
+import network.requestStr
 import react.*
+import react.dom.h2
 import services.CommentsService
 import services.PostWithCommentsService
 import styled.StyleSheet
@@ -34,6 +36,7 @@ interface ApplicationProps : RProps {
 }
 
 class ApplicationState : RState {
+    var deployTime = "loading deploy time"
     var organization = "Kotlin"
     var gitHubRepos: List<GitHubRepo> = emptyList()
 }
@@ -56,6 +59,19 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                 gitHubRepos += repos
             }
         }
+
+        props.coroutineScope.launch {
+            requestStr("build_date.txt")
+                .onSuccess { str ->
+                    setState {
+                        deployTime = str
+                    }
+                }.onFailure {
+                    setState {
+                        deployTime = "offline"
+                    }
+                }
+        }
     }
 
     override fun RBuilder.render() {
@@ -72,6 +88,12 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                         glyph = jetbrainsLogo
                     }
                 }
+            }
+        }
+
+        styledDiv {
+            h2 {
+                +("deploy time: " + state.deployTime)
             }
         }
 

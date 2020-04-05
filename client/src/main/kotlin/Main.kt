@@ -20,12 +20,6 @@ private class Application : CoroutineScope {
             }, it)
         }
         launch {
-            println("make request to github")
-            requestStr("build_date.txt").onSuccess {
-                println(it)
-            }.onFailure {
-
-            }
 
         }
     }
