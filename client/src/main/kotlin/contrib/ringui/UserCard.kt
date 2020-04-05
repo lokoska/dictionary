@@ -21,12 +21,6 @@ data class UserCardModel(
     val avatarUrl: String
 )
 
-data class UserCardWording(
-    val banned: String,
-    val online: String,
-    val offline: String
-)
-
 fun RBuilder.ringUserCard(user: UserCardModel, handler: RHandler<UserCardProps> = {}) {
     UserCardModule.UserCard {
         attrs.user = user

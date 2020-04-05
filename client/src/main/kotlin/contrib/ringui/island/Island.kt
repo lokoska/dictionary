@@ -10,12 +10,10 @@ internal external object IslandModule {
     val default: RClass<IslandProps>
     val Content: RClass<IslandContentProps>
     val Header: RClass<IslandHeaderProps>
-    val AdaptiveIsland: RClass<IslandProps>
 }
 
 // https://github.com/JetBrains/ring-ui/blob/master/components/island/island.js
-external interface IslandProps : WithClassName {
-}
+external interface IslandProps : WithClassName
 
 fun RBuilder.ringIsland(handler: RHandler<IslandProps>) {
     IslandModule.default {
