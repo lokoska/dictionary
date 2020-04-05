@@ -111,7 +111,7 @@ class PostView : RComponent<PostProps, PostState>() {
                             }
                         }
 
-                        +"Load more comments"
+                        +"Load commit history"
                     }
                 }
             }
