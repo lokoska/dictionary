@@ -1,0 +1,7 @@
+creatStore(reducer, initState, applyMiddlewares())
+store.dispatch(action)
+
+Midleware store=>next=>action = {
+    next(action)
+}
+
