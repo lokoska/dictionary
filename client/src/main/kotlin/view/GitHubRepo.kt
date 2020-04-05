@@ -1,7 +1,5 @@
 package view
 
-import contrib.ringui.island.ringIsland
-import contrib.ringui.island.ringIslandContent
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
@@ -65,46 +63,48 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
     }
 
     override fun RBuilder.render() {
-        ringIsland {
-            ringIslandContent {
-                userView(props.gitHubRepo.name, props.gitHubRepo.imageUrl) {
+        styledDiv {
+//            css {
+//                outline = Outline.valueOf("1px solid #666")
+//            }
+
+            userView(props.gitHubRepo.name, props.gitHubRepo.imageUrl) {
+                css {
+                    marginBottom = 16.px
+                }
+            }
+
+            styledDiv {
+                css {
+                    if (commitLogs.isNotEmpty()) {
+                        +GigHubRepoStyles.body
+                    } else {
+                        +GigHubRepoStyles.noComments
+                    }
+                }
+                +props.gitHubRepo.description
+            }
+
+            commitLogs.forEach {
+                commentView(it) {
                     css {
-                        marginBottom = 16.px
+                        +GigHubRepoStyles.comment
                     }
                 }
+            }
 
-                styledDiv {
-                    css {
-                        if (commitLogs.isNotEmpty()) {
-                            +GigHubRepoStyles.body
-                        } else {
-                            +GigHubRepoStyles.noComments
-                        }
-                    }
-                    +props.gitHubRepo.description
-                }
-
-                commitLogs.forEach {
-                    commentView(it) {
-                        css {
-                            +GigHubRepoStyles.comment
-                        }
-                    }
-                }
-
-                if (!state.noMore) {
-                    button {
-                        attrs {
-                            onClickFunction = {
-                                setState {
-                                    loading = true
-                                }
-                                props.onMoreComments()
+            if (!state.noMore) {
+                button {
+                    attrs {
+                        onClickFunction = {
+                            setState {
+                                loading = true
                             }
+                            props.onMoreComments()
                         }
-
-                        +"Load commit history"
                     }
+
+                    +"Load commit history"
                 }
             }
         }
