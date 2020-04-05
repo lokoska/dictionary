@@ -21,9 +21,6 @@ private class Application : CoroutineScope {
         }
         launch {
             println("make request to github")
-            requestStr("https://api.github.com/orgs/Kotlin/repos").onSuccess {
-                println(it)
-            }
             requestStr("build_date.txt").onSuccess {
                 println(it)
             }.onFailure {
