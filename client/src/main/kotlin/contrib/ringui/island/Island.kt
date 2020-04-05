@@ -9,7 +9,6 @@ import react.dom.WithClassName
 internal external object IslandModule {
     val default: RClass<IslandProps>
     val Content: RClass<IslandContentProps>
-    val Header: RClass<IslandHeaderProps>
 }
 
 // https://github.com/JetBrains/ring-ui/blob/master/components/island/island.js

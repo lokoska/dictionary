@@ -2,7 +2,6 @@ package view
 
 import contrib.ringui.island.ringIsland
 import contrib.ringui.island.ringIslandContent
-import contrib.ringui.island.ringIslandHeader
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
@@ -67,13 +66,6 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
 
     override fun RBuilder.render() {
         ringIsland {
-            ringIslandHeader {
-                attrs {
-                    border = true
-                }
-                +repo.name
-            }
-
             ringIslandContent {
                 userView(props.gitHubRepo.name, props.gitHubRepo.imageUrl) {
                     css {
