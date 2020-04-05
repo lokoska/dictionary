@@ -15,8 +15,6 @@ internal external object IslandModule {
 
 // https://github.com/JetBrains/ring-ui/blob/master/components/island/island.js
 external interface IslandProps : WithClassName {
-    val narrow: Boolean
-    val withoutPaddings: Boolean
 }
 
 fun RBuilder.ringIsland(handler: RHandler<IslandProps>) {
@@ -25,8 +23,3 @@ fun RBuilder.ringIsland(handler: RHandler<IslandProps>) {
     }
 }
 
-fun RBuilder.ringAdaptiveIsland(handler: RHandler<IslandProps>) {
-    IslandModule.AdaptiveIsland {
-        handler()
-    }
-}

@@ -13,7 +13,6 @@ private external object UserCardModule {
 // https://github.com/JetBrains/ring-ui/blob/master/components/user-card/card.js
 external interface UserCardProps : RProps {
     var user: UserCardModel
-    var wording: UserCardWording
 }
 
 data class UserCardModel(
