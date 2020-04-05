@@ -16,5 +16,5 @@ pluginManagement {
 }
 rootProject.name = 'kotlin-full-stack-application-demo'
 
-include 'shared'
+include 'github'
 include 'client'

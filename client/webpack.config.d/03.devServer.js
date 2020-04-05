@@ -6,21 +6,21 @@
     const serverUrl = 'http://localhost:8081'
 
     if (shouldRunServer) {
-        console.log("Running " + serverTaskName + " in background...")
-        // __dirname = $ROOT/build/js/packages/$PACKAGE_NAME
-        // rootProject = $ROOT
-        const rootProject = require('path').resolve(__dirname, '../../../../')
-        const child = require('child_process').exec(
-            "./gradlew " + serverTaskName,
-            {
-                "cwd": rootProject
-            },
-            (err, stdout, stderr) => {
-                if (err) {
-                    console.log("Cannot run " + serverTaskName + " server: " + err);
-                }
-            }
-        )
+        // console.log("Running " + serverTaskName + " in background...")
+        // // __dirname = $ROOT/build/js/packages/$PACKAGE_NAME
+        // // rootProject = $ROOT
+        // const rootProject = require('path').resolve(__dirname, '../../../../')
+        // const child = require('child_process').exec(
+        //     "./gradlew " + serverTaskName,
+        //     {
+        //         "cwd": rootProject
+        //     },
+        //     (err, stdout, stderr) => {
+        //         if (err) {
+        //             console.log("Cannot run " + serverTaskName + " server: " + err);
+        //         }
+        //     }
+        // )
 
         let isBackendRun = false
 
