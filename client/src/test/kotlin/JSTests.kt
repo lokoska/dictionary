@@ -1,6 +1,6 @@
-import model.Comment
+import model.CommitInfo
 import model.Post
-import model.PostWithComments
+import model.GitHubRepo
 import view.PostState
 import view.PostView
 import kotlin.test.Test
@@ -20,17 +20,17 @@ class SampleEnzymeTest: EnzymeTest() {
     @Test
     fun testPostView() = runAsyncTest {
         var callCount = 0
-        val testPostData = PostWithComments(
+        val testPostData = GitHubRepo(
             post = Post(1, 1, "title", "body"),
             comments = mutableListOf(
-                Comment(1, 1, "John.Doe", "john.doe@example.com", "comment"),
-                Comment(1, 2, "Jane.Doe", "jane.doe@example.com", "comment")
+                CommitInfo(1, 1, "John.Doe", "john.doe@example.com", "comment"),
+                CommitInfo(1, 2, "Jane.Doe", "jane.doe@example.com", "comment")
             )
         )
 
         val element = enzymeMount {
             child(PostView::class) {
-                attrs.postWithComments = testPostData
+                attrs.gitHubRepo = testPostData
                 attrs.onMoreComments = {
                     callCount++
                 }

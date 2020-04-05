@@ -1,18 +1,16 @@
 package services
 
-import model.Comment
+import model.CommitInfo
 import kotlin.coroutines.CoroutineContext
 
 class CommentsService(coroutineContext: CoroutineContext) {
 
-    suspend fun getComments(postId: String, count: Int = 5): List<Comment> =
+    suspend fun loadCommitLog(organization:String, repo:String, count: Int = 5): List<CommitInfo> =
         List(count) {
-            Comment(
-                1,
-                2,
-                "name1",
-                "mail1",
-                "body text...."
+            CommitInfo(
+                "user@user",
+                "add something useful",
+                "15:35 GMT"
             )
         }
 }

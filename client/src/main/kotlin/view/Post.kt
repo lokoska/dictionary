@@ -6,8 +6,7 @@ import contrib.ringui.island.ringIslandHeader
 import contrib.ringui.ringButton
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
-import model.PostWithComments
-import model.User
+import model.GitHubRepo
 import react.*
 import styled.StyleSheet
 import styled.css
@@ -35,8 +34,7 @@ object PostStyles : StyleSheet("PostStyles", isStatic = true) {
 }
 
 interface PostProps : RProps {
-    var postWithComments: PostWithComments
-    var user: User?
+    var gitHubRepo: GitHubRepo
     var onMoreComments: () -> Unit
 }
 
@@ -46,11 +44,11 @@ class PostState : RState {
 }
 
 class PostView : RComponent<PostProps, PostState>() {
-    private val post
-        get() = props.postWithComments.post
+    private val repo
+        get() = props.gitHubRepo
 
-    private val comments
-        get() = props.postWithComments.comments
+    private val commitLogs
+        get() = props.gitHubRepo.commitLogs
 
     init {
         state = PostState()
@@ -59,7 +57,8 @@ class PostView : RComponent<PostProps, PostState>() {
     override fun componentDidUpdate(prevProps: PostProps, prevState: PostState, snapshot: Any) {
         if (state.loading && prevProps != props) {
             setState {
-                noMore = prevProps.postWithComments.comments.size == props.postWithComments.comments.size
+
+                noMore = prevProps.gitHubRepo.commitLogs.size == props.gitHubRepo.commitLogs.size
                 loading = false
             }
         }
@@ -71,30 +70,28 @@ class PostView : RComponent<PostProps, PostState>() {
                 attrs {
                     border = true
                 }
-                +post.title
+                +repo.name
             }
 
             ringIslandContent {
-                props.user?.let {
-                    userView(it) {
-                        css {
-                            marginBottom = 16.px
-                        }
+                userView(props.gitHubRepo.name, props.gitHubRepo.imageUrl) {
+                    css {
+                        marginBottom = 16.px
                     }
                 }
 
                 styledDiv {
                     css {
-                        if (comments.isNotEmpty()) {
+                        if (commitLogs.isNotEmpty()) {
                             +PostStyles.body
                         } else {
                             +PostStyles.noComments
                         }
                     }
-                    +post.body
+                    +"Additional info"
                 }
 
-                comments.forEach {
+                commitLogs.forEach {
                     commentView(it) {
                         css {
                             +PostStyles.comment
@@ -123,15 +120,13 @@ class PostView : RComponent<PostProps, PostState>() {
 }
 
 fun RBuilder.postView(
-    post: PostWithComments,
-    user: User? = null,
-    onMoreComments: () -> Unit,
+    post: GitHubRepo,
+    onLoadCommmits: () -> Unit,
     handler: RHandler<PostProps> = {}
 ) {
     child(PostView::class) {
-        attrs.postWithComments = post
-        attrs.user = user
-        attrs.onMoreComments = onMoreComments
+        attrs.gitHubRepo = post
+        attrs.onMoreComments = onLoadCommmits
         handler()
     }
 }

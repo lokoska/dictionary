@@ -3,23 +3,19 @@ package view
 import contrib.ringui.header.ringHeader
 import contrib.ringui.header.ringLogo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.paddingLeft
 import kotlinx.css.px
-import model.PostWithComments
-import model.User
+import model.GitHubRepo
 import react.*
 import services.CommentsService
 import services.PostWithCommentsService
-import services.UserService
 import styled.StyleSheet
 import styled.css
 import styled.styledA
 import styled.styledDiv
-import kotlin.random.Random
 
 val jetbrainsLogo = kotlinext.js.require("@jetbrains/logos/jetbrains/jetbrains-simple.svg")
 
@@ -38,8 +34,8 @@ interface ApplicationProps : RProps {
 }
 
 class ApplicationState : RState {
-    var postWithComments: List<PostWithComments> = emptyList()
-    var users: List<User> = emptyList()
+    var organization = "Kotlin"
+    var gitHubRepos: List<GitHubRepo> = emptyList()
 }
 
 class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
@@ -52,23 +48,12 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
 
     override fun componentDidMount() {
         val postWithCommentsService = PostWithCommentsService(coroutineContext)
-        val userService = UserService(coroutineContext)
 
         props.coroutineScope.launch {
-            val posts = postWithCommentsService.getPostsWithComments()
+            val repos = postWithCommentsService.getGitHubRepos("Kotlin")//TODO брать из стейта
 
             setState {
-                postWithComments += posts
-            }
-
-            // Parallel coroutines execution example
-            val userIds = posts.map { it.post.userId }.toSet()
-            val users = userIds
-                .map { async { userService.getUser(it) } }
-                .map { it.await() }
-
-            setState {
-                this.users = users
+                gitHubRepos += repos
             }
         }
     }
@@ -95,34 +80,28 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                 +ApplicationStyles.wrapper
             }
 
-            state.postWithComments.map { postWithComments ->
+            state.gitHubRepos.map { repo: GitHubRepo ->
                 styledDiv {
                     css {
                         +ApplicationStyles.post
                     }
                     postView(
-                        postWithComments,
-                        state.users.find { it.id == postWithComments.post.userId },
-                        onMoreComments = {
-                            onMoreComment(postWithComments.post.id)
+                        repo,
+                        onLoadCommmits = {
+                            onLoadCommitsLog(repo.organization, repo.name)
                         })
                 }
             }
         }
     }
 
-    private fun onMoreComment(postId: Int) {
-        val commentsService = CommentsService(coroutineContext)
-        val post = state.postWithComments.find { it.post.id == postId }
-
-        if (post != null) {
-            props.coroutineScope.launch {
-                val comments = commentsService.getComments(postId.toString(), Random.nextInt(4))
-
-                setState {
-                    postWithComments = postWithComments.map {
-                        if (it != post) it else PostWithComments(it.post, it.comments + comments)
-                    }
+    private fun onLoadCommitsLog(organization: String, repoName: String) {
+        val commitLoadService = CommentsService(coroutineContext)
+        props.coroutineScope.launch {
+            val commitLogs = commitLoadService.loadCommitLog(organization, repoName)
+            setState {
+                gitHubRepos = gitHubRepos.map {
+                    if (it.name != repoName) it else it.copy(commitLogs = it.commitLogs + commitLogs)
                 }
             }
         }

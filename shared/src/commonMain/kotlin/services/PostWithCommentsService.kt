@@ -1,8 +1,8 @@
 package services
 
-import model.PostWithComments
+import model.GitHubRepo
 
 expect class PostWithCommentsService {
-    suspend fun getPostsWithComments(): List<PostWithComments>
+    suspend fun getGitHubRepos(organization:String): List<GitHubRepo>
 
 }

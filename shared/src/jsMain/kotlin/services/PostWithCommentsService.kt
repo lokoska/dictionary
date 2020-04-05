@@ -1,24 +1,20 @@
 package services
 
-import model.Comment
-import model.Post
-import model.PostWithComments
+import model.GitHubRepo
 import kotlin.coroutines.CoroutineContext
 
 actual class PostWithCommentsService(coroutineContext: CoroutineContext) {
 
-    actual suspend fun getPostsWithComments(): List<PostWithComments> = listOf(
-        PostWithComments(
-            post = Post(1, 2, "user1", "body1"),
-            comments = listOf(
-                Comment(1, 2, "comment1", "mail1@mail.com", "commend body")
-            )
+    actual suspend fun getGitHubRepos(organization: String): List<GitHubRepo> = listOf(
+        GitHubRepo(
+            name = "kotlin-examples",
+            imageUrl = "https://avatars3.githubusercontent.com/u/1446536?v=4",
+            organization = organization
         ),
-        PostWithComments(
-            post = Post(3, 5, "user2", "body1"),
-            comments = listOf(
-                Comment(4, 5, "comment1", "mail1@mail.com", "commend body")
-            )
+        GitHubRepo(
+            name = "kotlin-examples 2",
+            imageUrl = "https://avatars3.githubusercontent.com/u/1446536?v=4",
+            organization = organization
         )
     )
 }

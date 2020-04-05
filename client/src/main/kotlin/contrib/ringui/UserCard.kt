@@ -19,9 +19,7 @@ external interface UserCardProps : RProps {
 data class UserCardModel(
     val name: String,
     val login: String,
-    val avatarUrl: String,
-    val email: String? = null,
-    val href: String? = null
+    val avatarUrl: String
 )
 
 data class UserCardWording(
