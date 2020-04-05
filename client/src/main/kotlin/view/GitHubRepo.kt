@@ -12,7 +12,7 @@ import styled.StyleSheet
 import styled.css
 import styled.styledDiv
 
-object PostStyles : StyleSheet("PostStyles", isStatic = true) {
+object GigHubRepoStyles : StyleSheet("PostStyles", isStatic = true) {
     val noComments by css {
         marginBottom = 8.px
     }
@@ -33,17 +33,17 @@ object PostStyles : StyleSheet("PostStyles", isStatic = true) {
     }
 }
 
-interface PostProps : RProps {
+interface GitHubRepoProps : RProps {
     var gitHubRepo: GitHubRepo
     var onMoreComments: () -> Unit
 }
 
-class PostState : RState {
+class GitHubRepoState : RState {
     var noMore: Boolean = false
     var loading: Boolean = false
 }
 
-class PostView : RComponent<PostProps, PostState>() {
+class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
     private val repo
         get() = props.gitHubRepo
 
@@ -51,10 +51,10 @@ class PostView : RComponent<PostProps, PostState>() {
         get() = props.gitHubRepo.commitLogs
 
     init {
-        state = PostState()
+        state = GitHubRepoState()
     }
 
-    override fun componentDidUpdate(prevProps: PostProps, prevState: PostState, snapshot: Any) {
+    override fun componentDidUpdate(prevProps: GitHubRepoProps, prevState: GitHubRepoState, snapshot: Any) {
         if (state.loading && prevProps != props) {
             setState {
 
@@ -83,18 +83,18 @@ class PostView : RComponent<PostProps, PostState>() {
                 styledDiv {
                     css {
                         if (commitLogs.isNotEmpty()) {
-                            +PostStyles.body
+                            +GigHubRepoStyles.body
                         } else {
-                            +PostStyles.noComments
+                            +GigHubRepoStyles.noComments
                         }
                     }
-                    +"Additional info"
+                    +props.gitHubRepo.description
                 }
 
                 commitLogs.forEach {
                     commentView(it) {
                         css {
-                            +PostStyles.comment
+                            +GigHubRepoStyles.comment
                         }
                     }
                 }
@@ -122,9 +122,9 @@ class PostView : RComponent<PostProps, PostState>() {
 fun RBuilder.postView(
     post: GitHubRepo,
     onLoadCommmits: () -> Unit,
-    handler: RHandler<PostProps> = {}
+    handler: RHandler<GitHubRepoProps> = {}
 ) {
-    child(PostView::class) {
+    child(GitHubRepoView::class) {
         attrs.gitHubRepo = post
         attrs.onMoreComments = onLoadCommmits
         handler()

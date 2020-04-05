@@ -14,7 +14,8 @@ actual class PostWithCommentsService(coroutineContext: CoroutineContext) {
             GitHubRepo(
                 name = obj.name,
                 imageUrl = obj.owner.avatar_url,
-                organization = obj.owner.login
+                organization = obj.owner.login,
+                description = obj.description
             )
         }
     }
