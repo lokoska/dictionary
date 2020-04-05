@@ -21,7 +21,6 @@ kotlin {
             dependencies {
                 implementation(project(":lib"))
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$SERIALIZATION_VERSION")
             }
         }
         val commonTest by getting {

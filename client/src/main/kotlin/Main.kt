@@ -1,6 +1,5 @@
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import react.buildElement
 import react.dom.render
 import view.ApplicationComponent
@@ -17,9 +16,6 @@ private class Application : CoroutineScope {
                     attrs.coroutineScope = this@Application
                 }
             }, it)
-        }
-        launch {
-
         }
     }
 }
