@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
+import lib.Redux
 import network.requestStr
 import react.*
 import react.dom.h2
@@ -36,7 +37,13 @@ class ApplicationState : RState {
 
 class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     init {
-        state = ApplicationState()
+        val store = Redux.store(ApplicationState()) { s, a: Action ->
+            s
+        }
+        store.subscribeToState {
+            setState(it)
+        }
+        state = store.state
     }
 
     private val coroutineContext
@@ -45,6 +52,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     override fun componentDidMount() {
         props.coroutineScope.launch {
             GitHubService.getGitHubRepos("Kotlin").onSuccess {
+                setState(ApplicationState())
                 setState {
                     gitHubRepos += it
                 }
