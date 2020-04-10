@@ -18,10 +18,13 @@ object MviElm {
     }
 
     interface ReduceContext<State, SideEffect> {
+        fun onlyState(state: State):Reduce<State, SideEffect> = Reduce.ChangeState(state)
         fun State.onlyState():Reduce<State, SideEffect> = Reduce.ChangeState(this)
+        fun onlySideEffect(effect: SideEffect):Reduce<State, SideEffect> = Reduce.Effect(effect)
         fun SideEffect.onlySideEffect():Reduce<State, SideEffect> = Reduce.Effect(this)
         infix fun State.andEffect(effect: SideEffect): Reduce<State, SideEffect> = Reduce.Both(this, effect)
         infix fun SideEffect.andState(state: State): Reduce<State, SideEffect> = Reduce.Both(state, this)
+        fun both(state: State, effect:SideEffect): Reduce<State, SideEffect> = Reduce.Both(state, effect)
         val doNothing get():Reduce<State, SideEffect> = Reduce.DoNothing()
     }
 

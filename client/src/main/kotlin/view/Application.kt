@@ -3,7 +3,6 @@ package view
 import github.GitHubRepo
 import github.GitHubService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
@@ -29,11 +28,11 @@ interface ApplicationProps : RProps {
     var coroutineScope: CoroutineScope
 }
 
-class ApplicationState : RState {
-    var deployTime = "loading deploy time"
-    var organization = "Kotlin"
-    var gitHubRepos: List<GitHubRepo> = emptyList()
-}
+data class ApplicationState(
+    val deployTime: String = "",
+    val organization: String = "",
+    val gitHubRepos: List<GitHubRepo> = emptyList()
+) : RState
 
 class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     val store = MviElm.store(
@@ -47,6 +46,24 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                             store.dispatch(Intent.LoadedCommits(effect.repoName, commits))
                         }
                 }
+                is SideEffect.LoadRepos -> {
+                    GitHubService.getGitHubRepos(effect.organization).onSuccess {
+                        store.dispatch(Intent.LoadedRepos(it))
+                    }
+                }
+                is SideEffect.LoadDeployTime -> {
+                    requestStr("build_date.txt")
+                        .onSuccess { str ->
+                            setState {
+                                store.dispatch(Intent.SetDeployTime(str))
+                            }
+                        }.onFailure {
+                            setState {
+                                store.dispatch(Intent.SetDeployTime("offline"))
+                            }
+                        }
+
+                }
             }.exhaustive()
         }
     ) { state, intent: Intent ->
@@ -54,49 +71,43 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
             is Intent.LoadCommits ->
                 SideEffect.LoadCommits(intent.organization, intent.repoName).onlySideEffect()
             is Intent.LoadedCommits -> {
-                setState {
-                    gitHubRepos = gitHubRepos.map {
+                state.copy(
+                    gitHubRepos = state.gitHubRepos.map {
                         if (it.name != intent.repoName) it else it.copy(commitLogs = it.commitLogs + intent.commits)
                     }
-                }
-                doNothing
+                ).onlyState()
+            }
+            is Intent.LoadRepos -> {
+                state.copy(
+                    organization = intent.organization
+                ) andEffect SideEffect.LoadRepos(intent.organization)
+            }
+            is Intent.LoadedRepos -> {
+                state.copy(
+                    gitHubRepos = intent.repos
+                ).onlyState()
+            }
+            is Intent.LoadDeployTime -> {
+                SideEffect.LoadDeployTime.onlySideEffect()
+            }
+            is Intent.SetDeployTime -> {
+                state.copy(
+                    deployTime = intent.deployTime
+                ).onlyState()
             }
         }
     }
 
     init {
-
-        store.subscribeToState {
-            setState(it)
+        store.subscribeToState { newState ->
+            setState(transformState = { newState })
         }
         state = store.state
+        store.dispatch(Intent.LoadRepos("Kotlin"))
+        store.dispatch(Intent.LoadDeployTime)
     }
 
-    private val coroutineContext
-        get() = props.coroutineScope.coroutineContext
-
     override fun componentDidMount() {
-        props.coroutineScope.launch {
-            GitHubService.getGitHubRepos("Kotlin").onSuccess {
-                setState(ApplicationState())
-                setState {
-                    gitHubRepos += it
-                }
-            }
-        }
-
-        props.coroutineScope.launch {
-            requestStr("build_date.txt")
-                .onSuccess { str ->
-                    setState {
-                        deployTime = str
-                    }
-                }.onFailure {
-                    setState {
-                        deployTime = "offline"
-                    }
-                }
-        }
     }
 
     override fun RBuilder.render() {
@@ -128,10 +139,6 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                 }
             }
         }
-    }
-
-    private fun onLoadCommitsLog(organization: String, repoName: String) {
-
     }
 
 }
