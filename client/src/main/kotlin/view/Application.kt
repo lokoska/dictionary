@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
-import lib.Redux
+import lib.MviElm
 import network.requestStr
 import react.*
 import react.dom.h2
@@ -36,10 +36,36 @@ class ApplicationState : RState {
 }
 
 class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
-    init {
-        val store = Redux.store(ApplicationState()) { s, a: Action ->
-            s
+    val store = MviElm.store(
+        ApplicationState(),
+        { store, effect: SideEffect ->
+            fun Any.exhaustive() = Unit
+            when (effect) {
+                is SideEffect.LoadCommits -> {
+                    GitHubService.loadCommitLog(effect.organization, effect.repoName)
+                        .onSuccess { commits ->
+                            store.dispatch(Intent.LoadedCommits(effect.repoName, commits))
+                        }
+                }
+            }.exhaustive()
         }
+    ) { state, intent: Intent ->
+        when (intent) {
+            is Intent.LoadCommits ->
+                SideEffect.LoadCommits(intent.organization, intent.repoName).onlySideEffect()
+            is Intent.LoadedCommits -> {
+                setState {
+                    gitHubRepos = gitHubRepos.map {
+                        if (it.name != intent.repoName) it else it.copy(commitLogs = it.commitLogs + intent.commits)
+                    }
+                }
+                doNothing
+            }
+        }
+    }
+
+    init {
+
         store.subscribeToState {
             setState(it)
         }
@@ -96,7 +122,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                     gitHubRepoView(
                         repo,
                         onLoadCommmits = {
-                            onLoadCommitsLog(repo.organization, repo.name)
+                            store.dispatch(Intent.LoadCommits(repo.organization, repo.name))
                         }
                     )
                 }
@@ -105,17 +131,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     }
 
     private fun onLoadCommitsLog(organization: String, repoName: String) {
-        props.coroutineScope.launch {
-            val commitLogs = GitHubService.loadCommitLog(organization, repoName)
-                .onSuccess { commits ->
-                    setState {
-                        gitHubRepos = gitHubRepos.map {
-                            if (it.name != repoName) it else it.copy(commitLogs = it.commitLogs + commits)
-                        }
-                    }
-                }
 
-        }
     }
 
 }

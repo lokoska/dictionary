@@ -1,5 +1,8 @@
 package lib
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 object MviElm {
     interface Store<State, Intent> {
         fun dispatch(intent: Intent)
@@ -24,7 +27,7 @@ object MviElm {
 
     fun <State, Intent, SideEffect> store(
         initialState: State,
-        sideEffectHandler: (Store<State, Intent>, SideEffect) -> Unit,
+        sideEffectHandler: suspend (Store<State, Intent>, SideEffect) -> Unit,
         reducer: ReduceContext<State, SideEffect>.(State, Intent) -> Reduce<State, SideEffect>
     ): Store<State, Intent> {
         var state: State = initialState
@@ -41,7 +44,10 @@ object MviElm {
                 }
 
                 fun applySideEffect(effect: SideEffect) {
-                    sideEffectHandler(this, effect)
+                    val store = this
+                    GlobalScope.launch {
+                        sideEffectHandler(store, effect)
+                    }
                 }
 
                 val context = object : ReduceContext<State, SideEffect> {}
