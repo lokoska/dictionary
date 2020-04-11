@@ -9,6 +9,7 @@ import kotlinx.css.px
 import lib.MviElm
 import network.requestStr
 import react.*
+import react.dom.div
 import react.dom.h2
 import styled.StyleSheet
 import styled.css
@@ -118,25 +119,18 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
             h2 {
                 +("Deploy time: " + state.deployTime)
             }
-        }
-
-        styledDiv {
-            css {
-                +ApplicationStyles.wrapper
-            }
-
-            state.gitHubRepos.map { repo: GitHubRepo ->
-                styledDiv {
-                    css {
-                        +ApplicationStyles.post
-                    }
-                    gitHubRepoView(
-                        repo,
-                        onLoadCommmits = {
+            div {
+                state.gitHubRepos.forEach { repo: GitHubRepo ->
+                    styledDiv {
+                        css {
+                            +ApplicationStyles.post
+                        }
+                        gitHubRepoView(repo) {
                             store.dispatch(Intent.LoadCommits(repo.organization, repo.name))
                         }
-                    )
+                    }
                 }
+
             }
         }
     }

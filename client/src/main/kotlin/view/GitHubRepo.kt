@@ -114,12 +114,10 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
 
 fun RBuilder.gitHubRepoView(
     post: GitHubRepo,
-    onLoadCommmits: () -> Unit,
-    handler: RHandler<GitHubRepoProps> = {}
+    onLoadCommits: () -> Unit
 ) {
     child(GitHubRepoView::class) {
         attrs.gitHubRepo = post
-        attrs.onMoreComments = onLoadCommmits
-        handler()
+        attrs.onMoreComments = onLoadCommits
     }
 }
