@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-./gradlew client:browserProductionWebpack
+./gradlew client:myBuildProduction
 
 cp -r client/build/distributions/* docs
-date > docs/build_date.txt
 du -sh docs/*

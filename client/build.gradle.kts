@@ -37,3 +37,20 @@ dependencies {
     testImplementation(npm("enzyme", "3.9.0"))
     testImplementation(npm("enzyme-adapter-react-16", "1.12.1"))
 }
+
+tasks {
+    register("myBuildProduction") {
+        dependsOn("browserProductionWebpack")
+        doLast {
+            file("build/distributions/build_date.txt").writeText(BUILD_TIME_STR)
+        }
+    }
+    register("myRun") {
+        doLast {
+            SimpleHttpFileServerFactory().start(file("build/distributions/"), 8888)
+            println("server started:")
+            println("http://localhost:8888/index.html")
+            Thread.sleep(Long.MAX_VALUE)
+        }
+    }
+}
