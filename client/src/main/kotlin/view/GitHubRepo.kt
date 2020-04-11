@@ -11,35 +11,10 @@ import styled.styledDiv
 
 interface GitHubRepoProps : RProps {
     var gitHubRepo: GitHubRepo
-    var onMoreComments: () -> Unit
+    var onClickCommitLogBtn: () -> Unit
 }
 
-class GitHubRepoState : RState {
-    var noMore: Boolean = false
-    var loading: Boolean = false
-}
-
-class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
-    private val repo
-        get() = props.gitHubRepo
-
-    private val commitLogs
-        get() = props.gitHubRepo.commitLogs
-
-    init {
-        state = GitHubRepoState()
-    }
-
-    override fun componentDidUpdate(prevProps: GitHubRepoProps, prevState: GitHubRepoState, snapshot: Any) {
-        if (state.loading && prevProps != props) {
-            setState {
-
-                noMore = prevProps.gitHubRepo.commitLogs.size == props.gitHubRepo.commitLogs.size
-                loading = false
-            }
-        }
-    }
-
+class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
     override fun RBuilder.render() {
         styledDiv {
             css {
@@ -56,7 +31,7 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
             styledDiv {
                 css {
                     marginBottom = 8.px
-                    if (commitLogs.isNotEmpty()) {
+                    if (props.gitHubRepo.commitLogs.isNotEmpty()) {
                         paddingBottom = 8.px
                         borderBottom(1.px, BorderStyle.solid, Color("#000").withAlpha(0.1))
                     }
@@ -64,7 +39,7 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
                 +props.gitHubRepo.description
             }
 
-            commitLogs.forEach {
+            props.gitHubRepo.commitLogs.forEach {
                 commitView(it) {
                     css {
                         lastOfType {
@@ -74,19 +49,13 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
                 }
             }
 
-            if (!state.noMore) {
-                button {
-                    attrs {
-                        onClickFunction = {
-                            setState {
-                                loading = true
-                            }
-                            props.onMoreComments()
-                        }
+            button {
+                attrs {
+                    onClickFunction = {
+                        props.onClickCommitLogBtn()
                     }
-
-                    +"Load commit history"
                 }
+                +"Load commit history"
             }
         }
     }
@@ -98,6 +67,6 @@ fun RBuilder.gitHubRepoView(
 ) {
     child(GitHubRepoView::class) {
         attrs.gitHubRepo = post
-        attrs.onMoreComments = onLoadCommits
+        attrs.onClickCommitLogBtn = onLoadCommits
     }
 }
