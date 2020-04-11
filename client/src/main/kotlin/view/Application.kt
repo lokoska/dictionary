@@ -11,22 +11,11 @@ import network.requestStr
 import react.*
 import react.dom.div
 import react.dom.h2
-import styled.StyleSheet
 import styled.css
 import styled.styledDiv
 
-private object ApplicationStyles : StyleSheet("ApplicationStyles", isStatic = true) {
-    val wrapper by css {
-        padding(32.px, 16.px)
-    }
-
-    val post by css {
-        marginBottom = 32.px
-    }
-}
-
 interface ApplicationProps : RProps {
-    var coroutineScope: CoroutineScope
+    var coroutineScope: CoroutineScope//todo redundant
 }
 
 data class ApplicationState(
@@ -114,7 +103,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
     override fun RBuilder.render() {
         styledDiv {
             css {
-                +ApplicationStyles.wrapper
+                padding(32.px, 16.px)
             }
             h2 {
                 +("Deploy time: " + state.deployTime)
@@ -123,7 +112,7 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                 state.gitHubRepos.forEach { repo: GitHubRepo ->
                     styledDiv {
                         css {
-                            +ApplicationStyles.post
+                            marginBottom = 32.px
                         }
                         gitHubRepoView(repo) {
                             store.dispatch(Intent.LoadCommits(repo.organization, repo.name))
