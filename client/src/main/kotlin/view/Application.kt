@@ -1,5 +1,7 @@
 package view
 
+import Intent
+import SideEffect
 import github.GitHubRepo
 import github.GitHubService
 import kotlinx.css.marginBottom

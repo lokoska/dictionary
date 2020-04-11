@@ -1,5 +1,3 @@
-package view
-
 import github.CommitInfo
 import github.GitHubRepo
 
@@ -14,7 +12,7 @@ sealed class Intent {
 }
 
 sealed class SideEffect {
-    object LoadDeployTime:SideEffect()
-    class LoadRepos(val organization: String):SideEffect()
+    object LoadDeployTime: SideEffect()
+    class LoadRepos(val organization: String): SideEffect()
     class LoadCommits(val organization: String, val repoName: String) : SideEffect()
 }

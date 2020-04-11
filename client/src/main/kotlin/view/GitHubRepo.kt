@@ -1,35 +1,13 @@
 package view
 
+import github.GitHubRepo
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
-import github.GitHubRepo
 import react.*
 import react.dom.button
-import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-
-object GigHubRepoStyles : StyleSheet("PostStyles", isStatic = true) {
-    val noComments by css {
-        marginBottom = 8.px
-    }
-
-    val body by css {
-        +noComments
-
-        paddingBottom = 8.px
-        borderBottom(1.px, BorderStyle.solid, Color("#000").withAlpha(0.1))
-    }
-
-    val comment by css {
-        +body
-
-        lastOfType {
-            borderBottomStyle = BorderStyle.none
-        }
-    }
-}
 
 interface GitHubRepoProps : RProps {
     var gitHubRepo: GitHubRepo
@@ -77,19 +55,21 @@ class GitHubRepoView : RComponent<GitHubRepoProps, GitHubRepoState>() {
 
             styledDiv {
                 css {
+                    marginBottom = 8.px
                     if (commitLogs.isNotEmpty()) {
-                        +GigHubRepoStyles.body
-                    } else {
-                        +GigHubRepoStyles.noComments
+                        paddingBottom = 8.px
+                        borderBottom(1.px, BorderStyle.solid, Color("#000").withAlpha(0.1))
                     }
                 }
                 +props.gitHubRepo.description
             }
 
             commitLogs.forEach {
-                commentView(it) {
+                commitView(it) {
                     css {
-                        +GigHubRepoStyles.comment
+                        lastOfType {
+                            borderBottomStyle = BorderStyle.dashed
+                        }
                     }
                 }
             }
