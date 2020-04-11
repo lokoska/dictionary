@@ -2,7 +2,6 @@ package view
 
 import github.GitHubRepo
 import github.GitHubService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
@@ -15,7 +14,7 @@ import styled.css
 import styled.styledDiv
 
 interface ApplicationProps : RProps {
-    var coroutineScope: CoroutineScope//todo redundant
+
 }
 
 data class ApplicationState(
