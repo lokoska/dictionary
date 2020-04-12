@@ -1,22 +1,17 @@
 import github.GitHubRepo
 import github.GitHubService
-import kotlinext.js.jsObject
 import kotlinx.css.marginBottom
 import kotlinx.css.padding
 import kotlinx.css.px
 import lib.Mvi
 import network.requestStr
-import org.w3c.dom.Element
 import react.*
 import react.dom.div
 import react.dom.h2
-import react.dom.render
 import styled.css
 import styled.styledDiv
-import view.MviComponent
 import view.GitHubRepoProps
 import view.gitHubRepoView
-import view.renderReactMviComponent
 import kotlin.browser.document
 
 fun main() {
@@ -31,7 +26,7 @@ data class ApplicationState(
     val gitHubRepos: List<GitHubRepo> = emptyList()
 ) : RState
 
-class ApplicationComponent:MviComponent<ApplicationState, AppIntent, SideEffect>(
+class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect>(
     ApplicationState()
 ) {
 

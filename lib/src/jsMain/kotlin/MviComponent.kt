@@ -1,12 +1,10 @@
-package view
-
 import kotlinext.js.jsObject
 import lib.Mvi
 import org.w3c.dom.Element
 import react.*
 import react.dom.render
 
-abstract class MviComponent<St, In, Se>(initState:St) : RComponent<RProps, St>()
+abstract class MviComponent<St, In, Se>(initState: St) : RComponent<RProps, St>()
         where St : RState {
 
     val store = Mvi.store<St, In, Se>(
