@@ -1,6 +1,5 @@
 package view
 
-import ApplicationState
 import kotlinext.js.jsObject
 import lib.Mvi
 import org.w3c.dom.Element
@@ -43,11 +42,11 @@ abstract class MviComponent<St, In, Se>(initState:St) : RComponent<RProps, St>()
     }
 }
 
-inline fun <reified T> Element.renderReactMviComponent()
-        where T : RComponent<out RProps, out ApplicationState> {
+inline fun <reified Component> Element.renderReactMviComponent()
+        where Component : RComponent<out RProps, out RState> {
     render(
         buildElement {
-            childList.add(createElement(T::class.js, jsObject<RProps> { }))
+            childList.add(createElement(Component::class.js, jsObject<RProps> { }))
         },
         this
     )
