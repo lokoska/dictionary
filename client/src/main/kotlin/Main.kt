@@ -14,9 +14,9 @@ import react.dom.render
 import styled.css
 import styled.styledDiv
 import view.MviComponent
-import view.ApplicationState
 import view.GitHubRepoProps
 import view.gitHubRepoView
+import view.renderReactMviComponent
 import kotlin.browser.document
 
 fun main() {
@@ -25,17 +25,15 @@ fun main() {
         ?.renderReactMviComponent<ApplicationComponent>()
 }
 
-inline fun <reified T> Element.renderReactMviComponent()
-        where T : RComponent<out RProps, out ApplicationState> {
-    render(
-        buildElement {
-            childList.add(createElement(T::class.js, jsObject<RProps> { }))
-        },
-        this
-    )
-}
+data class ApplicationState(
+    val deployTime: String = "",
+    val organization: String = "",
+    val gitHubRepos: List<GitHubRepo> = emptyList()
+) : RState
 
-class ApplicationComponent:MviComponent<ApplicationState, AppIntent, SideEffect>() {
+class ApplicationComponent:MviComponent<ApplicationState, AppIntent, SideEffect>(
+    ApplicationState()
+) {
 
     override fun afterInit(store: Mvi.Store<ApplicationState, AppIntent>) {
         store.dispatch(AppIntent.LoadRepos("Kotlin"))
@@ -104,8 +102,7 @@ class ApplicationComponent:MviComponent<ApplicationState, AppIntent, SideEffect>
         }
     }
 
-    override fun initState(): ApplicationState = ApplicationState()
-    override suspend fun sideEffectHandler2(store: Mvi.Store<ApplicationState, AppIntent>, effect: SideEffect) {
+    override suspend fun sideEffectHandler(store: Mvi.Store<ApplicationState, AppIntent>, effect: SideEffect) {
         when (effect) {
             is SideEffect.LoadCommits -> {
                 GitHubService.loadCommitLog(effect.organization, effect.repoName)

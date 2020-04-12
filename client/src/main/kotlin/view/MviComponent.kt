@@ -1,33 +1,23 @@
 package view
 
-import AppIntent
-import github.GitHubRepo
+import ApplicationState
+import kotlinext.js.jsObject
 import lib.Mvi
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import org.w3c.dom.Element
+import react.*
+import react.dom.render
 
-data class ApplicationState(
-    val deployTime: String = "",
-    val organization: String = "",
-    val gitHubRepos: List<GitHubRepo> = emptyList()
-) : RState
-
-typealias StoreType = Mvi.Store<ApplicationState, AppIntent>
-
-abstract class MviComponent<St, In, Se> : RComponent<RProps, St>()
+abstract class MviComponent<St, In, Se>(initState:St) : RComponent<RProps, St>()
         where St : RState {
 
-    abstract suspend fun sideEffectHandler2(store: Mvi.Store<St, In>, sideEffect: Se)
-    abstract fun Mvi.ReduceContext<St, Se>.reducer(state: St, intent: In): Mvi.Reduce<St, Se>
-    abstract fun initState(): St
-
     val store = Mvi.store<St, In, Se>(
-        initState(),
-        ::sideEffectHandler2,
+        initState,
+        ::sideEffectHandler,
         ::reducerWrapper
     )
+
+    abstract suspend fun sideEffectHandler(store: Mvi.Store<St, In>, effect: Se)
+    abstract fun Mvi.ReduceContext<St, Se>.reducer(state: St, intent: In): Mvi.Reduce<St, Se>
 
     private fun reducerWrapper(reduceContext: Mvi.ReduceContext<St, Se>, state: St, intent: In): Mvi.Reduce<St, Se> {
         return reduceContext.reducer(state, intent)
@@ -51,5 +41,14 @@ abstract class MviComponent<St, In, Se> : RComponent<RProps, St>()
     override fun RBuilder.render() {
         render2(state)
     }
+}
 
+inline fun <reified T> Element.renderReactMviComponent()
+        where T : RComponent<out RProps, out ApplicationState> {
+    render(
+        buildElement {
+            childList.add(createElement(T::class.js, jsObject<RProps> { }))
+        },
+        this
+    )
 }
