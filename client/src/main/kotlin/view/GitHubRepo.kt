@@ -1,13 +1,18 @@
 package view
 
+import github.CommitInfo
 import github.GitHubRepo
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
-import react.*
-import react.dom.button
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
+import react.dom.*
 import styled.css
 import styled.styledDiv
+import styled.styledSpan
 
 interface GitHubRepoProps : RProps {
     var gitHubRepo: GitHubRepo
@@ -21,13 +26,7 @@ class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
                 padding(all = 10.px)
                 backgroundColor = Color.lightGray
             }
-
-            repoView(props.gitHubRepo) {
-                css {
-                    marginBottom = 16.px
-                }
-            }
-
+            userView(props.gitHubRepo)
             styledDiv {
                 css {
                     marginBottom = 8.px
@@ -40,13 +39,7 @@ class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
             }
 
             props.gitHubRepo.commitLogs.forEach {
-                commitView(it) {
-                    css {
-                        lastOfType {
-                            borderBottomStyle = BorderStyle.dashed
-                        }
-                    }
-                }
+                commitView(it)
             }
 
             button {
@@ -63,10 +56,59 @@ class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
 
 fun RBuilder.gitHubRepoView(
     post: GitHubRepo,
-    onLoadCommits: () -> Unit
+    onClickCommitLogBtn: () -> Unit
 ) {
     child(GitHubRepoView::class) {
-        attrs.gitHubRepo = post
-        attrs.onClickCommitLogBtn = onLoadCommits
+        attrs {
+            gitHubRepo = post
+            this.onClickCommitLogBtn = onClickCommitLogBtn
+        }
+    }
+}
+
+fun RBuilder.userView(repo: GitHubRepo) {
+    styledDiv {
+        css {
+            marginBottom = 16.px
+        }
+        table {
+            tr {
+                th {
+                    img(src = repo.imageUrl) {
+                        attrs.width = "100px"
+                    }
+                }
+                th {
+                    h4 {
+                        +repo.name
+                    }
+                    +repo.organization
+                }
+            }
+        }
+    }
+}
+
+fun RBuilder.commitView(commit: CommitInfo) {
+    styledDiv {
+        css {
+            lastOfType {
+                borderBottomStyle = BorderStyle.dashed
+            }
+        }
+        styledSpan {
+            +commit.time
+        }
+        styledSpan {
+            css {
+                marginLeft = 8.px
+                marginRight = 8.px
+                fontWeight = FontWeight.bold
+            }
+            +commit.author
+        }
+        styledSpan {
+            +commit.title
+        }
     }
 }
