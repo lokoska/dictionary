@@ -19,11 +19,6 @@ class GitHubRepoProps(
 
 val gitHubRepoView = stateLessRComponent<GitHubRepoProps> { props ->
     styledDiv {
-        myComponent(
-            MyProps(
-                prop1 = "prop1 Value"
-            )
-        )
         css {
             padding(all = 10.px)
             backgroundColor = Color.lightGray
