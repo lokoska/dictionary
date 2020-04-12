@@ -7,7 +7,7 @@ class MviElmTests {
 
     @Test
     fun testInitState() {
-        val store = MviElm.store<Int, Unit, Unit>(0, { _, _ -> }) { _, _ ->
+        val store = Mvi.store<Int, Unit, Unit>(0, { _, _ -> }) { _, _ ->
             doNothing
         }
         var initState = -1
@@ -19,7 +19,7 @@ class MviElmTests {
 
     @Test
     fun testActionPropagation() {
-        val store = MviElm.store<Long, Int, Unit>(0, { _, _ -> }) { state, action ->
+        val store = Mvi.store<Long, Int, Unit>(0, { _, _ -> }) { state, action ->
             (state + action).onlyState()
         }
         store.dispatch(1)

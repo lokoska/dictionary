@@ -3,7 +3,7 @@ package lib
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-object MviElm {
+object Mvi {
     interface Store<State, Intent> {
         fun dispatch(intent: Intent)
         fun subscribeToState(subscription: (State) -> Unit)
