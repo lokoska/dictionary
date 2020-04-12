@@ -5,65 +5,52 @@ import github.GitHubRepo
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
-import react.*
+import react.RBuilder
+import react.RProps
 import react.dom.*
 import styled.css
 import styled.styledDiv
 import styled.styledSpan
 
-interface GitHubRepoProps : RProps {
-    var gitHubRepo: GitHubRepo
-    var onClickCommitLogBtn: () -> Unit
-}
+class GitHubRepoProps(
+    val gitHubRepo: GitHubRepo,
+    val onClickCommitLogBtn: () -> Unit
+) : RProps
 
-class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
-    override fun RBuilder.render() {
-        styledDiv {
-            myComponent(
-                MyProps(
-                    prop1 = "prop1 Value"
-                )
+val gitHubRepoView = stateLessRComponent<GitHubRepoProps> { props ->
+    styledDiv {
+        myComponent(
+            MyProps(
+                prop1 = "prop1 Value"
             )
-            css {
-                padding(all = 10.px)
-                backgroundColor = Color.lightGray
-            }
-            userView(props.gitHubRepo)
-            styledDiv {
-                css {
-                    marginBottom = 8.px
-                    if (props.gitHubRepo.commitLogs.isNotEmpty()) {
-                        paddingBottom = 8.px
-                        borderBottom(1.px, BorderStyle.solid, Color("#000").withAlpha(0.1))
-                    }
-                }
-                +props.gitHubRepo.description
-            }
-
-            props.gitHubRepo.commitLogs.forEach {
-                commitView(it)
-            }
-
-            button {
-                attrs {
-                    onClickFunction = {
-                        props.onClickCommitLogBtn()
-                    }
-                }
-                +"Load commit history"
-            }
+        )
+        css {
+            padding(all = 10.px)
+            backgroundColor = Color.lightGray
         }
-    }
-}
+        userView(props.gitHubRepo)
+        styledDiv {
+            css {
+                marginBottom = 8.px
+                if (props.gitHubRepo.commitLogs.isNotEmpty()) {
+                    paddingBottom = 8.px
+                    borderBottom(1.px, BorderStyle.solid, Color("#000").withAlpha(0.1))
+                }
+            }
+            +props.gitHubRepo.description
+        }
 
-fun RBuilder.gitHubRepoView(
-    post: GitHubRepo,
-    onClickCommitLogBtn: () -> Unit
-) {
-    child(GitHubRepoView::class) {
-        attrs {
-            gitHubRepo = post
-            this.onClickCommitLogBtn = onClickCommitLogBtn
+        props.gitHubRepo.commitLogs.forEach {
+            commitView(it)
+        }
+
+        button {
+            attrs {
+                onClickFunction = {
+                    props.onClickCommitLogBtn()
+                }
+            }
+            +"Load commit history"
         }
     }
 }

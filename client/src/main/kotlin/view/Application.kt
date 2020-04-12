@@ -121,9 +121,14 @@ class ApplicationComponent : RComponent<ApplicationProps, ApplicationState>() {
                         css {
                             marginBottom = 32.px
                         }
-                        gitHubRepoView(repo) {
-                            store.dispatch(Intent.LoadCommits(repo.organization, repo.name))
-                        }
+                        gitHubRepoView(
+                            GitHubRepoProps(
+                                gitHubRepo = repo,
+                                onClickCommitLogBtn = {
+                                    store.dispatch(Intent.LoadCommits(repo.organization, repo.name))
+                                }
+                            )
+                        )
                     }
                 }
 
