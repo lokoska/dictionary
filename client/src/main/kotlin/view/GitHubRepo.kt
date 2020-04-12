@@ -5,10 +5,7 @@ import github.GitHubRepo
 import kotlinx.css.*
 import kotlinx.css.properties.borderBottom
 import kotlinx.html.js.onClickFunction
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.*
 import styled.css
 import styled.styledDiv
@@ -22,6 +19,11 @@ interface GitHubRepoProps : RProps {
 class GitHubRepoView : RComponent<GitHubRepoProps, RState>() {
     override fun RBuilder.render() {
         styledDiv {
+            myComponent(
+                MyProps(
+                    prop1 = "prop1 Value"
+                )
+            )
             css {
                 padding(all = 10.px)
                 backgroundColor = Color.lightGray
