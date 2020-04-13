@@ -3,8 +3,7 @@ plugins {
 }
 
 allprojects {
-    version = "0.1.1"
-
+    version = "1.0"
     repositories {
         maven {  setUrl("https://dl.bintray.com/kotlin/kotlin-dev") }
         maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
@@ -15,5 +14,4 @@ allprojects {
         maven { setUrl("https://dl.bintray.com/kotlin/exposed") }
         mavenCentral()
     }
-
 }
