@@ -73,8 +73,9 @@ val store = Mvi.store<ApplicationState, AppIntent, SideEffect>(
 
 fun main() {
     GlobalStyles.inject()
-    document.getElementById("react-app")
-        ?.renderReactMviComponent<ApplicationComponent>()
+    document.getElementById("react-app")?.renderReactMviComponent<ApplicationComponent>()
+    store.dispatch(AppIntent.LoadRepos("Kotlin"))
+    store.dispatch(AppIntent.LoadDeployTime)
 }
 
 data class ApplicationState(
@@ -83,14 +84,9 @@ data class ApplicationState(
     val gitHubRepos: List<GitHubRepo> = emptyList()
 ) : RState
 
-class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect>(
+class ApplicationComponent: MviComponent<ApplicationState, AppIntent>(
     store
 ) {
-
-    override fun afterInit(store: Mvi.Store<ApplicationState, AppIntent>) {
-        store.dispatch(AppIntent.LoadRepos("Kotlin"))
-        store.dispatch(AppIntent.LoadDeployTime)
-    }
 
     override fun RBuilder.render2(state: ApplicationState) {
         styledDiv {
