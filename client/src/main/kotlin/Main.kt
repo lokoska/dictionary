@@ -73,6 +73,39 @@ val store = Mvi.store<ApplicationState, AppIntent, SideEffect>(
 
 fun main() {
     GlobalStyles.inject()
+
+    class ApplicationComponent : MviComponent<ApplicationState, AppIntent>(
+        store,
+        { state ->
+            styledDiv {
+                css {
+                    padding(32.px, 16.px)
+                }
+                h2 {
+                    +("Deploy time: " + state.deployTime)
+                }
+                div {
+                    state.gitHubRepos.forEach { repo: GitHubRepo ->
+                        styledDiv {
+                            css {
+                                marginBottom = 32.px
+                            }
+                            gitHubRepoView(
+                                GitHubRepoProps(
+                                    gitHubRepo = repo,
+                                    onClickCommitLogBtn = {
+                                        store.dispatch(AppIntent.LoadCommits(repo.organization, repo.name))
+                                    }
+                                )
+                            )
+                        }
+                    }
+
+                }
+            }
+        }
+    )
+
     document.getElementById("react-app")?.renderReactMviComponent<ApplicationComponent>()
     store.dispatch(AppIntent.LoadRepos("Kotlin"))
     store.dispatch(AppIntent.LoadDeployTime)
@@ -83,35 +116,3 @@ data class ApplicationState(
     val organization: String = "",
     val gitHubRepos: List<GitHubRepo> = emptyList()
 ) : RState
-
-class ApplicationComponent : MviComponent<ApplicationState, AppIntent>(
-    store,
-    { state ->
-        styledDiv {
-            css {
-                padding(32.px, 16.px)
-            }
-            h2 {
-                +("Deploy time: " + state.deployTime)
-            }
-            div {
-                state.gitHubRepos.forEach { repo: GitHubRepo ->
-                    styledDiv {
-                        css {
-                            marginBottom = 32.px
-                        }
-                        gitHubRepoView(
-                            GitHubRepoProps(
-                                gitHubRepo = repo,
-                                onClickCommitLogBtn = {
-                                    store.dispatch(AppIntent.LoadCommits(repo.organization, repo.name))
-                                }
-                            )
-                        )
-                    }
-                }
-
-            }
-        }
-    }
-)
