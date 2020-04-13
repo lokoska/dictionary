@@ -14,31 +14,33 @@ import view.GitHubRepoProps
 import view.gitHubRepoView
 import kotlin.browser.document
 
-fun main() {
-    GlobalStyles.inject()
-    document.getElementById("react-app")
-        ?.renderReactMviComponent<ApplicationComponent>()
-}
-
-data class ApplicationState(
-    val deployTime: String = "",
-    val organization: String = "",
-    val gitHubRepos: List<GitHubRepo> = emptyList()
-) : RState
-
-class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect>(
-    ApplicationState()
-) {
-
-    override fun afterInit(store: Mvi.Store<ApplicationState, AppIntent>) {
-        store.dispatch(AppIntent.LoadRepos("Kotlin"))
-        store.dispatch(AppIntent.LoadDeployTime)
+val store = Mvi.store<ApplicationState, AppIntent, SideEffect>(
+    ApplicationState(),
+    sideEffectHandler = { store, effect ->
+        when (effect) {
+            is SideEffect.LoadCommits -> {
+                GitHubService.loadCommitLog(effect.organization, effect.repoName)
+                    .onSuccess { commits ->
+                        store.dispatch(AppIntent.LoadedCommits(effect.repoName, commits))
+                    }
+            }
+            is SideEffect.LoadRepos -> {
+                GitHubService.getGitHubRepos(effect.organization).onSuccess {
+                    store.dispatch(AppIntent.LoadedRepos(it))
+                }
+            }
+            is SideEffect.LoadDeployTime -> {
+                requestStr("build_date.txt")
+                    .onSuccess { str ->
+                        store.dispatch(AppIntent.SetDeployTime(str))
+                    }.onFailure {
+                        store.dispatch(AppIntent.SetDeployTime("offline"))
+                    }
+            }
+        }.let {}
     }
-
-    override fun Mvi.ReduceContext<ApplicationState, SideEffect>.reducer(
-        state: ApplicationState,
-        intent: AppIntent
-    ): Mvi.Reduce<ApplicationState, SideEffect> = when (intent) {
+) { state, intent ->
+    when (intent) {
         is AppIntent.LoadCommits ->
             SideEffect.LoadCommits(intent.organization, intent.repoName).onlySideEffect()
         is AppIntent.LoadedCommits -> {
@@ -66,6 +68,28 @@ class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect
                 deployTime = intent.deployTime
             ).onlyState()
         }
+    }
+}
+
+fun main() {
+    GlobalStyles.inject()
+    document.getElementById("react-app")
+        ?.renderReactMviComponent<ApplicationComponent>()
+}
+
+data class ApplicationState(
+    val deployTime: String = "",
+    val organization: String = "",
+    val gitHubRepos: List<GitHubRepo> = emptyList()
+) : RState
+
+class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect>(
+    store
+) {
+
+    override fun afterInit(store: Mvi.Store<ApplicationState, AppIntent>) {
+        store.dispatch(AppIntent.LoadRepos("Kotlin"))
+        store.dispatch(AppIntent.LoadDeployTime)
     }
 
     override fun RBuilder.render2(state: ApplicationState) {
@@ -96,31 +120,5 @@ class ApplicationComponent: MviComponent<ApplicationState, AppIntent, SideEffect
             }
         }
     }
-
-    override suspend fun sideEffectHandler(store: Mvi.Store<ApplicationState, AppIntent>, effect: SideEffect) {
-        when (effect) {
-            is SideEffect.LoadCommits -> {
-                GitHubService.loadCommitLog(effect.organization, effect.repoName)
-                    .onSuccess { commits ->
-                        store.dispatch(AppIntent.LoadedCommits(effect.repoName, commits))
-                    }
-            }
-            is SideEffect.LoadRepos -> {
-                GitHubService.getGitHubRepos(effect.organization).onSuccess {
-                    store.dispatch(AppIntent.LoadedRepos(it))
-                }
-            }
-            is SideEffect.LoadDeployTime -> {
-                requestStr("build_date.txt")
-                    .onSuccess { str ->
-                        store.dispatch(AppIntent.SetDeployTime(str))
-                    }.onFailure {
-                        store.dispatch(AppIntent.SetDeployTime("offline"))
-                    }
-
-            }
-        }.let {}
-    }
-
 
 }

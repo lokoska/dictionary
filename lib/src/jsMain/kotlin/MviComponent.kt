@@ -4,21 +4,8 @@ import org.w3c.dom.Element
 import react.*
 import react.dom.render
 
-abstract class MviComponent<St, In, Se>(initState: St) : RComponent<RProps, St>()
+abstract class MviComponent<St, In, Se>(val store: Mvi.Store<St, In>) : RComponent<RProps, St>()
         where St : RState {
-
-    val store = Mvi.store<St, In, Se>(
-        initState,
-        ::sideEffectHandler,
-        ::reducerWrapper
-    )
-
-    abstract suspend fun sideEffectHandler(store: Mvi.Store<St, In>, effect: Se)
-    abstract fun Mvi.ReduceContext<St, Se>.reducer(state: St, intent: In): Mvi.Reduce<St, Se>
-
-    private fun reducerWrapper(reduceContext: Mvi.ReduceContext<St, Se>, state: St, intent: In): Mvi.Reduce<St, Se> {
-        return reduceContext.reducer(state, intent)
-    }
 
     init {
         store.subscribeToState { newState ->
