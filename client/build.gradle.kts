@@ -10,6 +10,7 @@ kotlin {
                 sourceMaps = false
             }
         }
+        produceExecutable()
     }
 }
 
@@ -21,7 +22,7 @@ dependencies {
     implementation(project(":lib"))
 
     implementation(npm("core-js", "2.6.5"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html:0.6.12")
+    implementation("org.jetbrains.kotlinx:kotlinx-html:0.7.1-build-1707")
     implementation("org.jetbrains:kotlin-react:16.13.0-$KOTLIN_WRAPPER_VERSION")
     implementation("org.jetbrains:kotlin-react-dom:16.13.0-$KOTLIN_WRAPPER_VERSION")
     implementation("org.jetbrains:kotlin-styled:1.0.0-$KOTLIN_WRAPPER_VERSION")

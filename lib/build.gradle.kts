@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     js {
-        useCommonJs()
+//        useCommonJs()
         browser {
             testTask {
                 testLogging {

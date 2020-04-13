@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.71" apply false
+    id("org.jetbrains.kotlin.multiplatform") version "1.4-M1" apply false
 }
 
 allprojects {
