@@ -8,6 +8,7 @@ import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RProps
 import react.dom.*
+import lib.stateLessRComponent
 import styled.css
 import styled.styledDiv
 import styled.styledSpan

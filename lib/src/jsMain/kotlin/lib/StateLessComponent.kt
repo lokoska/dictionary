@@ -1,4 +1,4 @@
-package view
+package lib
 
 import react.RBuilder
 import react.RProps

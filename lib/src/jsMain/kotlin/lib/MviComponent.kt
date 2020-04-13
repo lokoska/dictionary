@@ -1,5 +1,6 @@
+package lib
+
 import kotlinext.js.jsObject
-import lib.Mvi
 import org.w3c.dom.Element
 import react.*
 import react.dom.render
