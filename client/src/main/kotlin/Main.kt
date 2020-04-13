@@ -84,11 +84,9 @@ data class ApplicationState(
     val gitHubRepos: List<GitHubRepo> = emptyList()
 ) : RState
 
-class ApplicationComponent: MviComponent<ApplicationState, AppIntent>(
-    store
-) {
-
-    override fun RBuilder.render2(state: ApplicationState) {
+class ApplicationComponent : MviComponent<ApplicationState, AppIntent>(
+    store,
+    { state ->
         styledDiv {
             css {
                 padding(32.px, 16.px)
@@ -116,5 +114,4 @@ class ApplicationComponent: MviComponent<ApplicationState, AppIntent>(
             }
         }
     }
-
-}
+)

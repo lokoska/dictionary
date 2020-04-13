@@ -4,7 +4,10 @@ import org.w3c.dom.Element
 import react.*
 import react.dom.render
 
-abstract class MviComponent<St, In>(val store: Mvi.Store<St, In>) : RComponent<RProps, St>()
+abstract class MviComponent<St, In>(
+    store: Mvi.Store<St, In>,
+    val render2: RBuilder.(St) -> Unit
+) : RComponent<RProps, St>()
         where St : RState {
 
     init {
@@ -16,8 +19,6 @@ abstract class MviComponent<St, In>(val store: Mvi.Store<St, In>) : RComponent<R
 
     override fun componentDidMount() {
     }
-
-    abstract fun RBuilder.render2(state: St)
 
     override fun RBuilder.render() {
         render2(state)
