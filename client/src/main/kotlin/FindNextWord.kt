@@ -3,5 +3,5 @@ fun findNextWord(word: Word?, words: List<Word>, storage: Storage): Word {
         words - word
     } else {
         words
-    }.first()
+    }.random()//todo random
 }

@@ -7,7 +7,9 @@ sealed class Intent {
     class SetDeployTime(val deployTime: String) : Intent()
     class ChooseDictionary(val dictionary: Dictionary) : Intent()
     object StartWordScreen : Intent()
-    class MarkCurrentWord(val success: Boolean) : Intent()
+    class MarkWord(val success: Boolean) : Intent()
+    object OpenWord : Intent()
+    object NextWord : Intent()
 }
 
 sealed class SideEffect {

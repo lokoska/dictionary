@@ -1,13 +1,15 @@
 package mvi
 
-import ApplicationState
 import BrowserStorage
+import Screen
+import State
+import WordState
 import findNextWord
 import lib.Mvi
 import network.requestStr
 
-val store = Mvi.store<ApplicationState, Intent, SideEffect>(
-    ApplicationState(),
+val store = Mvi.store<State, Intent, SideEffect>(
+    State(),
     sideEffectHandler = { store, effect ->
         when (effect) {
             is SideEffect.LoadDeployTime -> {
@@ -55,22 +57,74 @@ val store = Mvi.store<ApplicationState, Intent, SideEffect>(
                 state.copy(
                     screen = Screen.Words(
                         words = words,
-                        word = findNextWord(null, words, BrowserStorage)
+                        word = findNextWord(null, words, BrowserStorage),
+                        wordState = WordState.Hidden
                     )
                 ).onlyState()
             } else {
                 doNothing
             }
         }
-        is Intent.MarkCurrentWord -> {
+        is Intent.MarkWord -> {
             if (state.screen is Screen.Words) {
                 state.copy(
-                    screen = state.screen.copy(
-                        word = findNextWord(state.screen.word, state.screen.words, BrowserStorage)
-                    )
+                    screen = when (state.screen.wordState) {
+                        is WordState.Hidden -> {
+                            if (intent.success) {
+                                state.screen.copy(
+                                    word = findNextWord(
+                                        state.screen.word,
+                                        state.screen.words,
+                                        BrowserStorage
+                                    ),
+                                    wordState = WordState.Hidden
+                                )
+                            } else {
+                                state.screen.copy(
+                                    wordState = WordState.Fail
+                                )
+                            }
+                        }
+                        is WordState.Open -> {
+                            state.screen.copy(
+                                word = findNextWord(
+                                    state.screen.word,
+                                    state.screen.words,
+                                    BrowserStorage
+                                ),
+                                wordState = WordState.Hidden
+                            )
+                        }
+                        is WordState.Fail -> {
+                            throw Error("bad variant: is WordState.Fail")
+                        }
+                    }
                 ).andEffect(
                     SideEffect.StoreWord(state.screen.word.hint, intent.success)
                 )
+            } else {
+                doNothing
+            }
+        }
+        is Intent.OpenWord -> {
+            if (state.screen is Screen.Words) {
+                state.copy(
+                    screen = state.screen.copy(
+                        wordState = WordState.Open
+                    )
+                ).onlyState()
+            } else {
+                doNothing
+            }
+        }
+        is Intent.NextWord -> {
+            if(state.screen is Screen.Words) {
+                state.copy(
+                    screen = state.screen.copy(
+                        word = findNextWord(state.screen.word, state.screen.words, BrowserStorage),
+                        wordState = WordState.Hidden
+                    )
+                ).onlyState()
             } else {
                 doNothing
             }
