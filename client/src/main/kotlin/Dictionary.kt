@@ -1,0 +1,7 @@
+class Dictionary() {
+
+}
+
+class Word() {
+
+}

@@ -16,7 +16,6 @@ kotlin {
 dependencies {
     implementation(kotlin("stdlib-js"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$COROUTINES_VERSION")
-    implementation(project(":github"))
     implementation(project(":network"))
     implementation(project(":lib"))
 
@@ -42,7 +41,14 @@ tasks {
     register("myBuildProduction") {
         dependsOn("browserProductionWebpack")
         doLast {
-            file("build/distributions/build_date.txt").writeText(BUILD_TIME_STR)
+            file("build/distributions/build_date.txt")
+                .also {
+                    if(!it.exists()) {
+                        it.parentFile.mkdirs()
+                        it.createNewFile()
+                    }
+                }
+                .writeText(BUILD_TIME_STR)
         }
     }
     register("myRun") {

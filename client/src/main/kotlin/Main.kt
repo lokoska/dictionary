@@ -15,6 +15,5 @@ fun main() {
     StyledComponents.createGlobalStyle(styles.toString())
 
     document.getElementById("react-app")?.renderReactMviComponent<ApplicationComponent>()
-    store.dispatch(AppIntent.LoadRepos("Kotlin"))
     store.dispatch(AppIntent.LoadDeployTime)
 }
