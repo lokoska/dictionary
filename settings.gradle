@@ -14,7 +14,7 @@ pluginManagement {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
 }
-rootProject.name = 'kotlin-full-stack-application-demo'
+rootProject.name = 'dictionary'
 
 include("client")
 include("network")

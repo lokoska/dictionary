@@ -13,6 +13,7 @@ import react.dom.button
 import react.dom.div
 import styled.css
 import styled.styledDiv
+import kotlin.js.Date
 
 val YES_NO_PT = 44.pt
 
@@ -236,9 +237,16 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                     fontSize = 20.pt
                                     color = Color.gray
                                 }
-                                val stat =
-                                    BrowserStorage.getItem(state.screen.word.hint) ?: StoreItem()
-                                +"Статистика по этоу слову: успех: ${stat.successCount}, ошибка: ${stat.failCount}"
+                                val stat = BrowserStorage.getItem(state.screen.word.hint) ?: StoreItem()
+                                +"Статистика по этоу слову: успех: ${stat.successCount}, ошибка: ${stat.failCount}, изменение: ${
+                                    if(stat.changedUnixTime == 0) {
+                                        "новое слово"
+                                    } else {
+                                        Date(
+                                            stat.changedUnixTime * 1000L
+                                        ).toTimeString()
+                                    }
+                                }"
                             }
                         }
                     }

@@ -5,6 +5,7 @@ import Screen
 import State
 import StoreItem
 import WordState
+import currentUnixTime
 import findNextWord
 import lib.Mvi
 import network.requestStr
@@ -25,11 +26,13 @@ val store = Mvi.store<State, Intent, SideEffect>(
                 val item = BrowserStorage.getItem(effect.key) ?: StoreItem()
                 val result = if (effect.success) {
                     item.copy(
-                        successCount = item.successCount + 1
+                        successCount = item.successCount + 1,
+                        changedUnixTime = currentUnixTime()
                     )
                 } else {
                     item.copy(
-                        failCount = item.failCount + 1
+                        failCount = item.failCount + 1,
+                        changedUnixTime = currentUnixTime()
                     )
                 }
                 BrowserStorage.saveItem(effect.key, result)
