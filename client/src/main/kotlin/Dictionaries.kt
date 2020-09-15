@@ -3,8 +3,10 @@ fun MutableList<Word>.word(hint: String, secret: String) {
 }
 
 @OptIn(ExperimentalStdlibApi::class)
-val dictionaries get() = buildList {
-    add(dictionary1)
-    add(dictionary2)
-    add(dictionary3)
+val allDictionaries by lazy {
+    buildList {
+        add(dictionary1)
+        add(dictionary2)
+        add(dictionary3)
+    }
 }

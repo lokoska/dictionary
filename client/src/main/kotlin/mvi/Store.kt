@@ -1,6 +1,8 @@
 package mvi
 
 import ApplicationState
+import BrowserStorage
+import findNextWord
 import lib.Mvi
 import network.requestStr
 
@@ -16,6 +18,9 @@ val store = Mvi.store<ApplicationState, Intent, SideEffect>(
                         store.dispatch(Intent.SetDeployTime("offline"))
                     }
             }
+            is SideEffect.StoreWord -> {
+                //todo storage
+            }
         }.let {}
     }
 ) { state, intent ->
@@ -29,9 +34,46 @@ val store = Mvi.store<ApplicationState, Intent, SideEffect>(
             ).onlyState()
         }
         is Intent.ChooseDictionary -> {
-            state.copy(
-                dictionary = intent.dictionary
-            ).onlyState()
+            if (state.screen is Screen.Dictionaries) {
+                val contains = state.screen.selected.contains(intent.dictionary)
+                state.copy(
+                    screen = state.screen.copy(
+                        selected = if (contains) {
+                            state.screen.selected - intent.dictionary
+                        } else {
+                            state.screen.selected + intent.dictionary
+                        }
+                    )
+                ).onlyState()
+            } else {
+                doNothing
+            }
+        }
+        is Intent.StartWordScreen -> {
+            if (state.screen is Screen.Dictionaries) {
+                val words = state.screen.selected.flatMap { it.words }.distinct()
+                state.copy(
+                    screen = Screen.Words(
+                        words = words,
+                        word = findNextWord(null, words, BrowserStorage)
+                    )
+                ).onlyState()
+            } else {
+                doNothing
+            }
+        }
+        is Intent.MarkCurrentWord -> {
+            if (state.screen is Screen.Words) {
+                state.copy(
+                    screen = state.screen.copy(
+                        word = findNextWord(state.screen.word, state.screen.words, BrowserStorage)
+                    )
+                ).andEffect(
+                    SideEffect.StoreWord(state.screen.word.hint, intent.success)
+                )
+            } else {
+                doNothing
+            }
         }
     }
 }

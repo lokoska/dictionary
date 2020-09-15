@@ -4,8 +4,19 @@ import react.RState
 
 data class ApplicationState(
     val deployTime: String = "",
-    val dictionary: Dictionary? = null
+    val screen: Screen = Screen.Dictionaries()
 ) : RState
+
+sealed class Screen {
+    data class Dictionaries(
+        val selected: Set<Dictionary> = emptySet()
+    ) : Screen()
+
+    data class Words(
+        val words: List<Word>,
+        val word: Word
+    ) : Screen()
+}
 
 data class Dictionary(
     val name: String,
