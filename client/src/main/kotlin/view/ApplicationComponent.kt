@@ -15,7 +15,7 @@ import styled.css
 import styled.styledDiv
 import kotlin.js.Date
 
-val YES_NO_PT = 44.pt
+val YES_NO_PT = 70.pt
 
 class ApplicationComponent : MviComponent<State, Intent>(
     store,
@@ -244,7 +244,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                     } else {
                                         Date(
                                             stat.changedUnixTime * 1000L
-                                        ).toTimeString()
+                                        ).toLocaleString()
                                     }
                                 }"
                             }
