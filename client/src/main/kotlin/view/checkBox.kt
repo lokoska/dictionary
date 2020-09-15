@@ -1,30 +1,52 @@
 package view
 
+import kotlinx.css.FontWeight
+import kotlinx.css.fontSize
+import kotlinx.css.fontWeight
+import kotlinx.css.pt
 import kotlinx.html.DIV
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLSelectElement
 import react.dom.*
+import styled.css
+import styled.styledDiv
 
 fun RDOMBuilder<DIV>.checkBox(
     label: String,
     value: Boolean,
     onClick: () -> Unit
 ) {
-    input(type = InputType.checkBox) {
-        attrs.checked = value
-        attrs.defaultChecked
-        attrs.onChangeFunction = {
-            onClick()
+    button {
+        attrs {
+            onClickFunction = {
+                onClick()
+            }
+        }
+        styledDiv {
+            css {
+                fontSize = 20.pt
+                if (value) {
+                    fontWeight = FontWeight.bold
+                }
+            }
+            +((if (value) "+" else "-") + label)
         }
     }
-    span {
-        +label
-        attrs.onClickFunction = {
-            onClick()
-        }
-    }
+//    input(type = InputType.checkBox) {
+//        attrs.checked = value
+//        attrs.defaultChecked
+//        attrs.onChangeFunction = {
+//            onClick()
+//        }
+//    }
+//    span {
+//        +label
+//        attrs.onClickFunction = {
+//            onClick()
+//        }
+//    }
 }
 
 fun RDOMBuilder<DIV>.selectCollection(

@@ -27,7 +27,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                     css {
                         marginBottom = 32.px
                         textAlign = TextAlign.center
-                        fontSize = 14.pt
+                        fontSize = 18.pt
                     }
                     when (state.screen) {
                         is Screen.Dictionaries -> {
@@ -93,6 +93,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                         }
                                         br {}
+                                        br {}
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold
@@ -141,13 +142,14 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             +state.screen.word.hint
                                         }
+                                        br {}
+                                        br {}
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold
                                             }
                                             +state.screen.word.secret
                                         }
-
                                         br {}
                                         button {
                                             attrs {
@@ -190,6 +192,8 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             +state.screen.word.hint
                                         }
+                                        br {}
+                                        br {}
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold

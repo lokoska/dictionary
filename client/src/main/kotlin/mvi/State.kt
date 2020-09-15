@@ -4,12 +4,12 @@ import react.RState
 
 data class State(
     val deployTime: String = "",
-    val screen: Screen = Screen.Dictionaries()
+    val screen: Screen = Screen.Dictionaries(allDictionaries.filter { it.useByDefault }.toSet())
 ) : RState
 
 sealed class Screen {
     data class Dictionaries(
-        val selected: Set<Dictionary> = emptySet()
+        val selected: Set<Dictionary>
     ) : Screen()
 
     data class Words(
@@ -21,6 +21,7 @@ sealed class Screen {
 
 data class Dictionary(
     val name: String,
+    val useByDefault: Boolean,
     val words: List<Word>
 )
 
