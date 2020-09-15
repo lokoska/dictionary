@@ -15,7 +15,8 @@ import styled.css
 import styled.styledDiv
 import kotlin.js.Date
 
-val YES_NO_PT = 70.pt
+val YES_NO_PT = 90.pt
+val WORD_PT = 44.pt
 
 class ApplicationComponent : MviComponent<State, Intent>(
     store,
@@ -30,7 +31,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                     css {
                         marginBottom = 32.px
                         textAlign = TextAlign.center
-                        fontSize = 24.pt
+                        fontSize = 28.pt
                     }
 
                     when (state.screen) {
@@ -38,7 +39,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                             button {
                                 attrs {
                                     onClickFunction = {
-                                        //todo
+                                        BrowserStorage.clear()
                                     }
                                 }
                                 styledDiv {
@@ -107,6 +108,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold
+                                                fontSize = WORD_PT
                                             }
                                             +state.screen.word.hint
                                         }
@@ -150,6 +152,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                         styledDiv {
                                             css {
 //                                                fontWeight = FontWeight.bold
+                                                fontSize = WORD_PT
                                             }
                                             +state.screen.word.hint
                                         }
@@ -158,6 +161,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold
+                                                fontSize = WORD_PT
                                             }
                                             +state.screen.word.secret
                                         }
@@ -201,6 +205,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                         styledDiv {
                                             css {
 //                                                fontWeight = FontWeight.bold
+                                                fontSize = WORD_PT
                                             }
                                             +state.screen.word.hint
                                         }
@@ -209,6 +214,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                         styledDiv {
                                             css {
                                                 fontWeight = FontWeight.bold
+                                                fontSize = WORD_PT
                                             }
                                             +state.screen.word.secret
                                         }
@@ -237,16 +243,17 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                     fontSize = 20.pt
                                     color = Color.gray
                                 }
-                                val stat = BrowserStorage.getItem(state.screen.word.hint) ?: StoreItem()
-                                +"Статистика по этоу слову: успех: ${stat.successCount}, ошибка: ${stat.failCount}, изменение: ${
-                                    if(stat.changedUnixTime == 0) {
-                                        "новое слово"
-                                    } else {
-                                        Date(
-                                            stat.changedUnixTime * 1000L
-                                        ).toLocaleString()
-                                    }
-                                }"
+                                val stat =
+                                    BrowserStorage.getItem(state.screen.word.hint) ?: StoreItem()
+                                +"Статистика по этоу слову:"
+                                br {}
+                                br {}
+                                +"успех: ${stat.successCount}, ошибка: ${stat.failCount},"
+                                br {}
+                                br {}
+                                +"изменение: ${if (stat.changedUnixTime == 0) { "новое слово" } else {
+                                        Date(stat.changedUnixTime * 1000L).toLocaleString()
+                                    }}"
                             }
                         }
                     }

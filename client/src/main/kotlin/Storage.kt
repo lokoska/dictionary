@@ -38,6 +38,10 @@ object BrowserStorage : Storage {
         )
     }
 
+    fun clear() {
+        kotlinx.browser.localStorage.clear()
+    }
+
 }
 
 fun currentUnixTime() = (currentTimeMillis() / 1000).toInt()
