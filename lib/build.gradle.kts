@@ -34,7 +34,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$COROUTINES_VERSION")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
             }
         }
         val commonTest by getting {
@@ -47,10 +47,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-js"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$COROUTINES_VERSION")
-                implementation("org.jetbrains:kotlin-react:16.13.0-$KOTLIN_WRAPPER_VERSION")
-                implementation("org.jetbrains:kotlin-react-dom:16.13.0-$KOTLIN_WRAPPER_VERSION")
-                implementation(npm("react", "16.13.0"))
-                implementation(npm("react-dom", "16.13.0"))
+                implementation("org.jetbrains:kotlin-react:16.13.1-$KOTLIN_WRAPPER_VERSION")
+                implementation("org.jetbrains:kotlin-react-dom:16.13.1-$KOTLIN_WRAPPER_VERSION")
+                implementation(npm("react", "16.13.1"))
+                implementation(npm("react-dom", "16.13.1"))
             }
         }
         val jsTest by getting {
