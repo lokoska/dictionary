@@ -1,6 +1,8 @@
 import kotlinext.js.invoke
 import kotlinx.css.*
 import lib.renderReactMviComponent
+import mvi.Intent
+import mvi.store
 import styled.StyledComponents
 import view.ApplicationComponent
 import kotlin.browser.document
@@ -15,5 +17,5 @@ fun main() {
     StyledComponents.createGlobalStyle(styles.toString())
 
     document.getElementById("react-app")?.renderReactMviComponent<ApplicationComponent>()
-    store.dispatch(AppIntent.LoadDeployTime)
+    store.dispatch(Intent.LoadDeployTime)
 }
