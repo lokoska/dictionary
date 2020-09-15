@@ -12,10 +12,12 @@ class StoreItem(
 object BrowserStorage:Storage {
 
     override fun getItem(key: String) {
+        kotlin.browser.localStorage.getItem(key.hashCode().toString())
         TODO("Not yet implemented")
     }
 
     override fun saveItem(key: String, item: StoreItem) {
+//        kotlin.browser.localStorage.setItem(key.hashCode().toString(), item)
         TODO("Not yet implemented")
     }
 
