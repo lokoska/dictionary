@@ -1,3 +1,4 @@
+import kotlinx.html.currentTimeMillis
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -7,21 +8,25 @@ interface Storage {
 }
 
 @Serializable
-class StoreItem(
-    val successCount: Int,
-    val failCount: Int,
-    val changedUnixTime: Int
+data class StoreItem(
+    val successCount: Int = 0,
+    val failCount: Int = 0,
+    val changedUnixTime: Int = 0
 )
 
 object BrowserStorage : Storage {
 
     override fun getItem(key: String): StoreItem? {
-        val fromStorage: String? =
-            kotlinx.browser.localStorage.getItem(key.hashCode().toString())
+        try {
+            val fromStorage: String? =
+                kotlinx.browser.localStorage.getItem(key.hashCode().toString())
 
-        if (fromStorage != null) {
-            return Json.decodeFromString(StoreItem.serializer(), fromStorage)
-        } else {
+            if (fromStorage != null) {
+                return Json.decodeFromString(StoreItem.serializer(), fromStorage)
+            } else {
+                return null
+            }
+        } catch (t: Throwable) {
             return null
         }
     }
@@ -34,3 +39,5 @@ object BrowserStorage : Storage {
     }
 
 }
+
+fun currentUnixTime() = (currentTimeMillis() / 1000).toInt()

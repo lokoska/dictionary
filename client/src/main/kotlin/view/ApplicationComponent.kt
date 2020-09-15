@@ -1,6 +1,7 @@
 package view
 
 import State
+import StoreItem
 import allDictionaries
 import kotlinx.css.*
 import lib.MviComponent
@@ -10,9 +11,10 @@ import mvi.store
 import react.dom.br
 import react.dom.button
 import react.dom.div
-import react.dom.h2
 import styled.css
 import styled.styledDiv
+
+val YES_NO_PT = 44.pt
 
 class ApplicationComponent : MviComponent<State, Intent>(
     store,
@@ -27,8 +29,9 @@ class ApplicationComponent : MviComponent<State, Intent>(
                     css {
                         marginBottom = 32.px
                         textAlign = TextAlign.center
-                        fontSize = 18.pt
+                        fontSize = 24.pt
                     }
+
                     when (state.screen) {
                         is Screen.Dictionaries -> {
                             button {
@@ -39,13 +42,19 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                 }
                                 styledDiv {
                                     css {
-                                        fontSize = 20.pt
+                                        fontSize = 30.pt
                                     }
                                     +"Очистить статистику"
                                 }
                             }
-                            h2 {
+                            styledDiv {
+                                css {
+                                    fontSize = 24.pt
+                                }
+                                br {}
                                 +("Обновление словарей: " + state.deployTime)
+                                br {}
+                                br {}
                             }
                             allDictionaries.forEach { dictionary ->
                                 styledDiv {
@@ -66,7 +75,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                 }
                                 styledDiv {
                                     css {
-                                        fontSize = 30.pt
+                                        fontSize = YES_NO_PT
                                     }
                                     +"Начать"
                                 }
@@ -86,7 +95,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                                 }
                                                 styledDiv {
                                                     css {
-                                                        fontSize = 20.pt
+                                                        fontSize = 30.pt
                                                     }
                                                     +"Показать перевод"
                                                 }
@@ -109,12 +118,13 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             styledDiv {
                                                 css {
-                                                    fontSize = 30.pt
+                                                    fontSize = YES_NO_PT
                                                     color = Color.darkGreen
                                                 }
                                                 +"Да"
                                             }
                                         }
+                                        +"..."
                                         button {
                                             attrs {
                                                 onClickFunction = {
@@ -123,7 +133,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             styledDiv {
                                                 css {
-                                                    fontSize = 30.pt
+                                                    fontSize = YES_NO_PT
                                                     color = Color.darkRed
                                                 }
                                                 +"Нет"
@@ -159,12 +169,13 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             styledDiv {
                                                 css {
-                                                    fontSize = 30.pt
+                                                    fontSize = YES_NO_PT
                                                     color = Color.darkGreen
                                                 }
                                                 +"Да"
                                             }
                                         }
+                                        +"..."
                                         button {
                                             attrs {
                                                 onClickFunction = {
@@ -173,7 +184,7 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             styledDiv {
                                                 css {
-                                                    fontSize = 30.pt
+                                                    fontSize = YES_NO_PT
                                                     color = Color.darkRed
                                                 }
                                                 +"Нет"
@@ -210,13 +221,24 @@ class ApplicationComponent : MviComponent<State, Intent>(
                                             }
                                             styledDiv {
                                                 css {
-                                                    fontSize = 30.pt
+                                                    fontSize = YES_NO_PT
                                                 }
                                                 +"Дальше"
                                             }
                                         }
                                     }
                                 }
+                            }
+                            br {}
+                            br {}
+                            styledDiv {
+                                css {
+                                    fontSize = 20.pt
+                                    color = Color.gray
+                                }
+                                val stat =
+                                    BrowserStorage.getItem(state.screen.word.hint) ?: StoreItem()
+                                +"Статистика по этоу слову: успех: ${stat.successCount}, ошибка: ${stat.failCount}"
                             }
                         }
                     }

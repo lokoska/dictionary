@@ -13,6 +13,6 @@ sealed class Intent {
 }
 
 sealed class SideEffect {
-    class StoreWord(val txt: String, val success: Boolean) : SideEffect()
+    class StoreWord(val key: String, val success: Boolean) : SideEffect()
     object LoadDeployTime : SideEffect()
 }

@@ -3,6 +3,7 @@ package mvi
 import BrowserStorage
 import Screen
 import State
+import StoreItem
 import WordState
 import findNextWord
 import lib.Mvi
@@ -21,7 +22,17 @@ val store = Mvi.store<State, Intent, SideEffect>(
                     }
             }
             is SideEffect.StoreWord -> {
-                //todo storage
+                val item = BrowserStorage.getItem(effect.key) ?: StoreItem()
+                val result = if (effect.success) {
+                    item.copy(
+                        successCount = item.successCount + 1
+                    )
+                } else {
+                    item.copy(
+                        failCount = item.failCount + 1
+                    )
+                }
+                BrowserStorage.saveItem(effect.key, result)
             }
         }.let {}
     }
@@ -118,7 +129,7 @@ val store = Mvi.store<State, Intent, SideEffect>(
             }
         }
         is Intent.NextWord -> {
-            if(state.screen is Screen.Words) {
+            if (state.screen is Screen.Words) {
                 state.copy(
                     screen = state.screen.copy(
                         word = findNextWord(state.screen.word, state.screen.words, BrowserStorage),

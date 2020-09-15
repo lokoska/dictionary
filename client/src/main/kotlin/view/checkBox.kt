@@ -26,7 +26,7 @@ fun RDOMBuilder<DIV>.checkBox(
         }
         styledDiv {
             css {
-                fontSize = 20.pt
+                fontSize = 30.pt
                 if (value) {
                     fontWeight = FontWeight.bold
                 }
