@@ -8,5 +8,7 @@ val allDictionaries by lazy {
         add(dictionary1)
         add(dictionary2)
         add(dictionary3)
+        add(dictionary4)
+        add(dictionary5)
     }
 }
