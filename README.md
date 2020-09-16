@@ -1,4 +1,4 @@
 # kotlin-full-stack-application-demo
 Full-stack demo application written with Kotlin MPP
 
-https://avdim.github.io/dictionary/
+https://lokoska.github.io/dictionary/
