@@ -6,6 +6,7 @@ val dictionary1
         words = buildList {
             word("Кошка", "Cat")
             word("Собака", "Dog")
+            word("Хомяк", "Hamster")
         }
     )
 
