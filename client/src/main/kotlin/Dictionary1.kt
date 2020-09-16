@@ -7,6 +7,7 @@ val dictionary1
             word("Кошка", "Cat")
             word("Собака", "Dog")
             word("Хомяк", "Hamster")
+            word("Хомяк 2", "Hamster 2")
         }
     )
 
